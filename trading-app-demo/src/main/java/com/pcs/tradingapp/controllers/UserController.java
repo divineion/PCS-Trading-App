@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -41,24 +42,34 @@ public class UserController {
     // pas besoin de données pour l'affichage du formulaire
     //mais le template attend un objet pour binder les champs,
     // donc fournir un objet vide
-    public String addUser(Model model) {
+    public String showAddUserForm(Model model) {
     	model.addAttribute("user", new CreateUserDto());
         return "user/add";
     }
-
+    
+    //https://www.baeldung.com/spring-thymeleaf-error-messages
+    // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+    // @ModelAttribute("user") synchronise de mon dto entre le contrôleur et le template.
     // la route est appelée au submit du form du template add
     // donc valider le dto puis redirect si OK, sinon
-    @PostMapping("/user/validate")
-    public String validate(@Valid CreateUserDto userDto, BindingResult result, Model model) throws RoleNotFoundException, UsernameAlreadyExistsException {
-        if (!result.hasErrors()) {
-        	List<UserInfoDto> users = service.validateNewUser(userDto);
-        	model.addAttribute("users", users);
-        	
-            return "redirect:/user/list";
-        }
-        model.addAttribute("user", userDto);
-        
-        return "user/add";
+    @PostMapping("/user/add")
+    public String addUser(@Valid @ModelAttribute("user") CreateUserDto userDto, BindingResult result, Model model) throws RoleNotFoundException {
+    	if (result.hasErrors()) {
+    		return "user/add";
+    	}
+
+    	try {
+			service.createNewUser(userDto);
+		    
+			model.addAttribute("user", userDto);
+
+			return "redirect:/user/list";
+    	} catch (UsernameAlreadyExistsException e) {
+    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/BindingResult.html
+    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/Errors.html#rejectValue(java.lang.String,java.lang.String)
+			result.rejectValue("username", null, e.getMessage());
+			return "user/add";
+    	}
     }
 
     @GetMapping("/user/update/{id}")
