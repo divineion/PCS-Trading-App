@@ -38,7 +38,11 @@ public class UserController {
     }
 
     @GetMapping("/user/add")
-    public String addUser(User bid) {
+    // pas besoin de données pour l'affichage du formulaire
+    //mais le template attend un objet pour binder les champs,
+    // donc fournir un objet vide
+    public String addUser(Model model) {
+    	model.addAttribute("user", new CreateUserDto());
         return "user/add";
     }
 
