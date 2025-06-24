@@ -1,11 +1,17 @@
 package com.pcs.tradingapp.controllers;
 
 import com.pcs.tradingapp.domain.User;
+import com.pcs.tradingapp.dto.request.CreateUserDto;
+import com.pcs.tradingapp.dto.response.UserInfoDto;
+import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.UserRepository;
+import com.pcs.tradingapp.services.UserService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserController {
-    @Autowired
+    private final UserService service;
+    
     private UserRepository userRepository;
+    
+    public UserController(UserService service) {
+    	this.service = service;
+    }
 
     @GetMapping("/user/list")
-    public String home(Model model)
-    {
-        model.addAttribute("users", userRepository.findAll());
+    public String listUsers(Model model) {
+    	List<UserInfoDto> users = service.getAllUsers();
+        model.addAttribute("users", users);
         return "user/list";
     }
 
