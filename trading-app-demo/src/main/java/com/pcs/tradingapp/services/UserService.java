@@ -5,15 +5,16 @@ import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
+import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.RoleRepository;
 import com.pcs.tradingapp.repositories.UserRepository;
-
-import jakarta.validation.Valid;
 
 @Service
 public class UserService {
@@ -33,12 +34,21 @@ public class UserService {
 		return mapper.usersToUserInfoDtos(users);
 	}
 
-	public List<UserInfoDto> validateNewUser(CreateUserDto userDto) {
+	public List<UserInfoDto> createNewUser(CreateUserDto userDto) throws RoleNotFoundException, UsernameAlreadyExistsException {
+		if (repository.findByUsername(userDto.getUsername()).isPresent()) {
+			throw new UsernameAlreadyExistsException(ApiMessages.USERNAME_ALREADY_EXISTS);
+		}
+		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDto.setPassword(encoder.encode(userDto.getPassword()));
         User user = mapper.createUserDtoToUser(userDto);
         
         Role role = roleRepository.findByName(RoleName.valueOf(userDto.getRole()));
+        
+        if (role == null) {
+            throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
+        }
+        
         user.setRole(role);
         
         repository.save(user);
