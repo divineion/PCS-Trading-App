@@ -46,15 +46,18 @@ public class UserController {
         return "user/add";
     }
 
+    // la route est appelée au submit du form du template add
+    // donc valider le dto puis redirect si OK, sinon
     @PostMapping("/user/validate")
-    public String validate(@Valid User user, BindingResult result, Model model) {
+    public String validate(@Valid CreateUserDto userDto, BindingResult result, Model model) throws RoleNotFoundException, UsernameAlreadyExistsException {
         if (!result.hasErrors()) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
+        	List<UserInfoDto> users = service.validateNewUser(userDto);
+        	model.addAttribute("users", users);
+        	
             return "redirect:/user/list";
         }
+        model.addAttribute("user", userDto);
+        
         return "user/add";
     }
 
