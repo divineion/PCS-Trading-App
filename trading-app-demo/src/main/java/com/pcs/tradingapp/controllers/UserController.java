@@ -61,8 +61,6 @@ public class UserController {
     	try {
 			service.createNewUser(userDto);
 		    
-			model.addAttribute("user", userDto);
-
 			return "redirect:/user/list";
     	} catch (UsernameAlreadyExistsException e) {
     		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/BindingResult.html
