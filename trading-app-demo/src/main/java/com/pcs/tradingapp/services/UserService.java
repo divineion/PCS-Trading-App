@@ -43,7 +43,15 @@ public class UserService {
         userDto.setPassword(encoder.encode(userDto.getPassword()));
         User user = mapper.createUserDtoToUser(userDto);
         
-        Role role = roleRepository.findByName(RoleName.valueOf(userDto.getRole()));
+        RoleName roleName = null;
+        
+        try {
+            roleName = RoleName.valueOf(userDto.getRole());
+        } catch (IllegalArgumentException ex) {
+            throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
+        }
+        
+        Role role = roleRepository.findByName(roleName);
         
         if (role == null) {
             throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
