@@ -5,21 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mapstruct.factory.Mappers;
+
 
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
 
-@SpringBootTest
 public class UserMapperTest {
-	@Autowired
-	UserMapper mapper;
-
+	private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
+	
     @Test
-    public void testCreateUserDtoToUserShouldPass() {
+    public void testCreateUserDtoToUserShouldPass() {   	
         CreateUserDto dto = new CreateUserDto();
         dto.setUsername("User1");
         dto.setFullname("User1");
