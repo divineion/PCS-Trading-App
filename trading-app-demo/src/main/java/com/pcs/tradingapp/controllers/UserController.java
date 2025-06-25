@@ -1,46 +1,73 @@
 package com.pcs.tradingapp.controllers;
 
 import com.pcs.tradingapp.domain.User;
+import com.pcs.tradingapp.dto.request.CreateUserDto;
+import com.pcs.tradingapp.dto.response.UserInfoDto;
+import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.UserRepository;
+import com.pcs.tradingapp.services.UserService;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserController {
-    @Autowired
+    private final UserService service;
+    
     private UserRepository userRepository;
+    
+    public UserController(UserService service) {
+    	this.service = service;
+    }
 
     @GetMapping("/user/list")
-    public String home(Model model)
-    {
-        model.addAttribute("users", userRepository.findAll());
+    public String listUsers(Model model) {
+    	List<UserInfoDto> users = service.getAllUsers();
+        model.addAttribute("users", users);
         return "user/list";
     }
 
     @GetMapping("/user/add")
-    public String addUser(User bid) {
+    // pas besoin de données pour l'affichage du formulaire
+    //mais le template attend un objet pour binder les champs,
+    // donc fournir un objet vide
+    public String showAddUserForm(Model model) {
+    	model.addAttribute("user", new CreateUserDto());
         return "user/add";
     }
+    
+    //https://www.baeldung.com/spring-thymeleaf-error-messages
+    // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+    // @ModelAttribute("user") synchronise de mon dto entre le contrôleur et le template.
+    // la route est appelée au submit du form du template add
+    // donc valider le dto puis redirect si OK, sinon
+    @PostMapping("/user/add")
+    public String addUser(@Valid @ModelAttribute("user") CreateUserDto userDto, BindingResult result, Model model) throws RoleNotFoundException {
+    	if (result.hasErrors()) {
+    		return "user/add";
+    	}
 
-    @PostMapping("/user/validate")
-    public String validate(@Valid User user, BindingResult result, Model model) {
-        if (!result.hasErrors()) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
-            return "redirect:/user/list";
-        }
-        return "user/add";
+    	try {
+			service.createNewUser(userDto);
+		    
+			return "redirect:/user/list";
+    	} catch (UsernameAlreadyExistsException e) {
+    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/BindingResult.html
+    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/Errors.html#rejectValue(java.lang.String,java.lang.String)
+			result.rejectValue("username", null, e.getMessage());
+			return "user/add";
+    	}
     }
 
     @GetMapping("/user/update/{id}")

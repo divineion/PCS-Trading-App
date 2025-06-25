@@ -4,24 +4,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "users")
+@Table(name = "app_user")
 public class User {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotBlank(message = "Username is mandatory")
+    
     private String username;
-    @NotBlank(message = "Password is mandatory")
+    
     private String password;
-    @NotBlank(message = "FullName is mandatory")
+    
     private String fullname;
-    @NotBlank(message = "Role is mandatory")
-    private String role;
-
+        
+	@ManyToOne
+	@JoinColumn(name="role", referencedColumnName = "id")
+	private Role role;
+	
+	public User(){};
+	
     public Integer getId() {
         return id;
     }
@@ -54,11 +59,11 @@ public class User {
         this.fullname = fullname;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }
