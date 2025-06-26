@@ -12,6 +12,7 @@ import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.RoleRepository;
 import com.pcs.tradingapp.repositories.UserRepository;
@@ -26,6 +27,40 @@ public class UserService {
 		this.repository = repository;
 		this.mapper = mapper;
 		this.roleRepository = roleRepository;
+	}
+	
+	public Role fetchUserRole(String roleString, User user) throws RoleNotFoundException {		
+		RoleName roleName = null;
+		
+		try {
+            roleName = RoleName.valueOf(roleString);
+        } catch (IllegalArgumentException ex) {
+            throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
+        }
+        
+        Role role = roleRepository.findByName(roleName);
+        
+        if (role == null) {
+        	throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
+        }
+        
+        return role;
+	}
+	
+	public boolean validateUsernameIsAvailable(String username) throws UsernameAlreadyExistsException {
+		if (repository.findByUsername(username).isPresent()) {
+			throw new UsernameAlreadyExistsException(ApiMessages.USERNAME_ALREADY_EXISTS);
+		}
+		
+		return true;
+	}
+	
+	public boolean validateUserExists(int id) throws UserNotFoundException {
+		if (repository.findById(id) == null) {
+        	throw new UserNotFoundException(ApiMessages.USER_NOT_FOUND);
+        }
+		
+		return true;
 	}
 	
 	public List<UserInfoDto> getAllUsers() {
