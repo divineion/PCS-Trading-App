@@ -20,7 +20,7 @@ import com.pcs.tradingapp.repositories.RoleRepository;
 import com.pcs.tradingapp.repositories.UserRepository;
 import com.pcs.tradingapp.services.UserMapper;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.profiles.active=test")
 @Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryIT {
