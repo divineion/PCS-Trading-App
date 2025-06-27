@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.pcs.tradingapp.domain.RoleName;
-import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
 import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.repositories.RoleRepository;
