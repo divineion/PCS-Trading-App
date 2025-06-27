@@ -30,7 +30,7 @@ public class UserService {
 		this.roleRepository = roleRepository;
 	}
 	
-	public Role fetchUserRole(String roleString, User user) throws RoleNotFoundException {		
+	public Role fetchUserRole(String roleString) throws RoleNotFoundException {		
 		RoleName roleName = null;
 		
 		try {
@@ -78,7 +78,7 @@ public class UserService {
         
         User user = mapper.createUserDtoToUser(userDto);
         
-        Role role = fetchUserRole(userDto.getRole(), user);
+        Role role = fetchUserRole(userDto.getRole());
         user.setRole(role);
         
         repository.save(user);
@@ -100,7 +100,7 @@ public class UserService {
         
         User userToUpdate = mapper.updateUserDtoToUser(userDto);
         
-        Role role = fetchUserRole(userDto.getRole(), userToUpdate);        
+        Role role = fetchUserRole(userDto.getRole());        
         userToUpdate.setRole(role);
         
         repository.save(userToUpdate);

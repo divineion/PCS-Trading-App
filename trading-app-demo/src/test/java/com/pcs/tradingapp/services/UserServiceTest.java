@@ -34,7 +34,7 @@ public class UserServiceTest {
 		when(roleRepository.findByName(RoleName.USER)).thenReturn(null);
 		
 		//act and assert: service shoul throw exception
-		assertThrows(RoleNotFoundException.class, ()-> service.fetchUserRole("USER", new User()));
+		assertThrows(RoleNotFoundException.class, ()-> service.fetchUserRole("USER"));
 	}
 	
 	@Test
