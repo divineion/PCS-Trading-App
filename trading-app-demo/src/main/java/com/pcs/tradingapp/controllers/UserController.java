@@ -1,20 +1,17 @@
 package com.pcs.tradingapp.controllers;
 
-import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
 import com.pcs.tradingapp.dto.request.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
 import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
-import com.pcs.tradingapp.repositories.UserRepository;
 import com.pcs.tradingapp.services.UserService;
 
 import jakarta.validation.Valid;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,9 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
     private final UserService service;
-    
-    @Autowired
-    private UserRepository userRepository;
     
     public UserController(UserService service) {
     	this.service = service;
@@ -99,10 +93,9 @@ public class UserController {
 	}
 
     @GetMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable Integer id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userRepository.delete(user);
-        model.addAttribute("users", userRepository.findAll());
+    public String deleteUser(@PathVariable Integer id, Model model) throws UserNotFoundException {
+    	service.deleteUser(id); 
+        
         return "redirect:/user/list";
     }
 }
