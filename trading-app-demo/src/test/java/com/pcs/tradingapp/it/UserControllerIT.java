@@ -156,6 +156,22 @@ public class UserControllerIT {
     		.andExpect(redirectedUrl("/user/list"));
     }
     
+    @Test
+    public void testDeleteUser_shouldReturnUsersListView() throws Exception {
+    	mockMvc.perform(get("/user/delete/2"))
+    	
+    	.andExpect(status().is3xxRedirection())
+    	.andExpect(redirectedUrl("/user/list"));
+    }
+    
+    @Test
+    public void testDeleteUser_shouldRedirectToErrorView() throws Exception {
+    	mockMvc.perform(get("/user/delete/999"))
+    	
+    	.andExpect(status().is2xxSuccessful())
+    	.andExpect(view().name("error"));
+    }
+    
     /**
      * This test ensures robustness against potential inconsistencies. 
      * 
