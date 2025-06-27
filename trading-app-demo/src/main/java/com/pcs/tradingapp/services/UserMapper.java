@@ -21,6 +21,9 @@ public interface UserMapper {
 	@Mapping(target = "role", expression = "java(user.getRole().getName().name())")
 	public UpdateUserDto userToUpdateUserDto(User user);
 	
+	@Mapping(target="role", ignore=true)
+	public User updateUserDtoToUser (UpdateUserDto userDto);
+	
 	@Mapping(target="id", ignore=true)
 	@Mapping(target="role", ignore=true)
 	public User createUserDtoToUser(CreateUserDto userDto);
