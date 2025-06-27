@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.pcs.tradingapp.config.DevSecurityConfiguration;
@@ -16,6 +17,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+ // https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring/annotation-dirtiescontext.html
+// clean up database before each test
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
 @Import(DevSecurityConfiguration.class)
@@ -65,6 +69,91 @@ public class UserControllerIT {
                 .andExpect(view().name("user/add"))
                 //model attribute then fields
                 .andExpect(model().attributeHasFieldErrors("user", "fullname", "username", "password", "role"));
+    }  
+
+    @Test
+    public void testAddUser_withUnavailableUsername_ShouldReturnAddUserViewWithError() throws Exception {  	
+    	mockMvc.perform(post("/user/add")
+    			.param("fullname", "Fullname")
+    			.param("username", "user") 
+    			.param("password", "AnyP@ssw0rd") // RoleNotFoundException si password invalide et username already exists
+    			.param("role", "USER")
+    			)
+    	
+    	.andExpect(status().is2xxSuccessful())
+    	.andExpect(view().name("user/add"))
+    	//model attribute then fields
+    	.andExpect(model().attributeHasFieldErrors("user", "username"));
+    }
+
+    @Test
+    public void  testShowUpdateForm_ShouldReturnUpdateView() throws Exception {
+    	mockMvc.perform(get("/user/update/1"))
+    		.andExpect(status().is2xxSuccessful())
+    		.andExpect(view().name("user/update"))
+    		.andExpect(model().attributeExists("user"));
+    }
+    
+    @Test
+    public void  testShowUpdateForm_WithUnknownUserParameter_ShouldReturnErrorPage() throws Exception {
+    	mockMvc.perform(get("/user/update/999"))
+    		.andExpect(status().is2xxSuccessful())
+    		.andExpect(view().name("error"));
+    }
+    
+    @Test
+    public void testUpdateUser_shouldRedirectToUpdatedUsersList() throws Exception {
+    	mockMvc.perform(post("/user/update/1")
+    				.param("fullname", "Main Administrator")
+    				.param("username", "MainAdmin")
+    				.param("role", "ADMIN")
+    				.param("password", "mainAdminNewP@ssw0rd")
+    			)
+    	    	
+    		.andExpect(status().is3xxRedirection())
+    		.andExpect(redirectedUrl("/user/list"));
+    }
+    
+    @Test
+    public void testUpdateUser_withInvalidPassword_ShouldReturnUpdateUserViewWithError() throws Exception {  	
+    	mockMvc.perform(post("/user/update/1")
+    			.param("fullname", "Fullname")
+    			.param("username", "availableusername") 
+    			.param("password", "invalid!password")
+    			.param("role", "USER")
+    			)
+    	
+    	.andDo(print())
+    	.andExpect(status().is2xxSuccessful())
+    	.andExpect(view().name("user/update"))
+    	.andExpect(model().attributeHasFieldErrors("user", "password"));
+    }  
+    
+    @Test
+    public void testUpdateUser_withUnavailableUsername_shouldReturnUpdateViewWithErrors() throws Exception {
+    	mockMvc.perform(post("/user/update/1")
+    			.param("fullname", "Administrator")
+    			.param("username", "admin")
+    			.param("role", "ADMIN")
+    			.param("password", "AnyP@ssw0rd")
+    			)
+    	    	
+    	.andExpect(status().is2xxSuccessful())
+    	.andExpect(view().name("user/update"))
+    	.andExpect(model().attributeExists("user"));
+    }
+    
+    @Test
+    public void testUpdateUser_withUnkownUser_shouldReturnErrorPage() throws Exception {
+    	mockMvc.perform(post("/user/update/19")
+    				.param("fullname", "Main Administrator")
+    				.param("username", "MainAdmin")
+    				.param("role", "ADMIN")
+    				.param("password", "mainAdminNewP@ssw0rd")
+    			)
+    	
+    		.andExpect(status().is3xxRedirection())
+    		.andExpect(redirectedUrl("/user/list"));
     }
     
     /**
@@ -82,9 +171,9 @@ public class UserControllerIT {
         		.param("fullname", "Valid Fullname")
                 .param("username", "SomeUsername") 
                 .param("password", "V@lidP@ssw0rd")
-                .param("role", "UNKNOWN")
+                .param("role", "admin")
     		)
-        		.andDo(print())
+        
                 .andExpect(status().isInternalServerError());
     }
 }
