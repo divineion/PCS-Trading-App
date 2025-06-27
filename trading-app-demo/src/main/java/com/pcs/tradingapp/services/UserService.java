@@ -105,4 +105,10 @@ public class UserService {
         
         repository.save(userToUpdate);
 	}
+
+	public void deleteUser(Integer id) throws UserNotFoundException {
+		User user = repository.findById(id).orElseThrow( () -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
+		
+        repository.delete(user);
+	}
 }
