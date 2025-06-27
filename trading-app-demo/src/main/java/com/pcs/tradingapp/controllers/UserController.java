@@ -2,8 +2,10 @@ package com.pcs.tradingapp.controllers;
 
 import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
+import com.pcs.tradingapp.dto.request.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.UserRepository;
 import com.pcs.tradingapp.services.UserService;
@@ -12,7 +14,7 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
     private final UserService service;
     
+    @Autowired
     private UserRepository userRepository;
     
     public UserController(UserService service) {
@@ -71,27 +74,29 @@ public class UserController {
     }
 
     @GetMapping("/user/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+    public String showUpdateForm(@PathVariable Integer id, Model model) throws UserNotFoundException {
+        UpdateUserDto user = service.fetchUpdateUserDto(id);
+        
         user.setPassword("");
         model.addAttribute("user", user);
+       
         return "user/update";
     }
 
     @PostMapping("/user/update/{id}")
-    public String updateUser(@PathVariable Integer id, @Valid User user,
-                             BindingResult result, Model model) {
+    public String updateUser(@PathVariable Integer id, @Valid @ModelAttribute("user") UpdateUserDto user, BindingResult result, Model model) throws RoleNotFoundException, UserNotFoundException {
         if (result.hasErrors()) {
             return "user/update";
         }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setId(id);
-        userRepository.save(user);
-        model.addAttribute("users", userRepository.findAll());
-        return "redirect:/user/list";
-    }
+        
+    	try {
+			service.updateUser(user);
+		} catch (UsernameAlreadyExistsException e) {
+			result.rejectValue("username", null, e.getMessage());
+			return "user/update";
+		}
+		return "redirect:/user/list";
+	}
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable Integer id, Model model) {

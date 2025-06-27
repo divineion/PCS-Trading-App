@@ -10,8 +10,10 @@ import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
 import com.pcs.tradingapp.dto.request.CreateUserDto;
+import com.pcs.tradingapp.dto.request.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
+import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
 import com.pcs.tradingapp.repositories.RoleRepository;
 import com.pcs.tradingapp.repositories.UserRepository;
@@ -28,25 +30,11 @@ public class UserService {
 		this.roleRepository = roleRepository;
 	}
 	
-	public List<UserInfoDto> getAllUsers() {
-		List<User> users = repository.findAll();
+	public Role fetchUserRole(String roleString) throws RoleNotFoundException {		
+		RoleName roleName = null;
 		
-		return mapper.usersToUserInfoDtos(users);
-	}
-
-	public List<UserInfoDto> createNewUser(CreateUserDto userDto) throws RoleNotFoundException, UsernameAlreadyExistsException {
-		if (repository.findByUsername(userDto.getUsername()).isPresent()) {
-			throw new UsernameAlreadyExistsException(ApiMessages.USERNAME_ALREADY_EXISTS);
-		}
-		
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        userDto.setPassword(encoder.encode(userDto.getPassword()));
-        User user = mapper.createUserDtoToUser(userDto);
-        
-        RoleName roleName = null;
-        
-        try {
-            roleName = RoleName.valueOf(userDto.getRole());
+		try {
+            roleName = RoleName.valueOf(roleString);
         } catch (IllegalArgumentException ex) {
             throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
         }
@@ -54,13 +42,67 @@ public class UserService {
         Role role = roleRepository.findByName(roleName);
         
         if (role == null) {
-            throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
+        	throw new RoleNotFoundException(ApiMessages.ROLE_NOT_FOUND);
         }
         
+        return role;
+	}
+	
+	public boolean validateUsernameIsAvailable(String username) throws UsernameAlreadyExistsException {
+		if (repository.findByUsername(username).isPresent()) {
+			throw new UsernameAlreadyExistsException(ApiMessages.USERNAME_ALREADY_EXISTS);
+		}
+		
+		return true;
+	}
+	
+	public boolean validateUserExists(int id) throws UserNotFoundException {
+		if (repository.findById(id) == null) {
+        	throw new UserNotFoundException(ApiMessages.USER_NOT_FOUND);
+        }
+		
+		return true;
+	}
+	
+	public List<UserInfoDto> getAllUsers() {
+		List<User> users = repository.findAll();
+		
+		return mapper.usersToUserInfoDtos(users);
+	}
+
+	public void createNewUser(CreateUserDto userDto) throws RoleNotFoundException, UsernameAlreadyExistsException {
+		validateUsernameIsAvailable(userDto.getUsername());
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userDto.setPassword(encoder.encode(userDto.getPassword()));
+        
+        User user = mapper.createUserDtoToUser(userDto);
+        
+        Role role = fetchUserRole(userDto.getRole());
         user.setRole(role);
         
         repository.save(user);
+	}
+	
+	// TODO rename method
+	public UpdateUserDto fetchUpdateUserDto(Integer id) throws UserNotFoundException {
+		User dbUser = repository.findById(id).orElseThrow(() -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
+        return  mapper.userToUpdateUserDto(dbUser);
+	}
+	
+	public void updateUser(UpdateUserDto userDto) throws RoleNotFoundException, UserNotFoundException, UsernameAlreadyExistsException {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userDto.setPassword(encoder.encode(userDto.getPassword()));
         
-        return getAllUsers();
+        validateUserExists(userDto.getId());
+        
+		validateUsernameIsAvailable(userDto.getUsername());
+        
+        User userToUpdate = mapper.updateUserDtoToUser(userDto);
+        
+        Role role = fetchUserRole(userDto.getRole());        
+        userToUpdate.setRole(role);
+        
+        repository.save(userToUpdate);
 	}
 }
