@@ -1,39 +1,80 @@
 package com.pcs.tradingapp.domain;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "bidlist")
+@Table(name = "bid_list")
 public class BidList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Size(max=30)
+	@Column(nullable=false)
 	private String account;
+	
+	@Size(max=30)
+	@Column(nullable=false)
 	private String type;
-	private Double bidQuantity;
-	private Double askQuantity;
-	private Double bid;
-	private Double ask;
+	
+	private int bidQuantity;
+	
+	private int askQuantity;
+	
+	@Column(columnDefinition = "DECIMAL(10,4")
+	private BigDecimal bid;
+	
+	@Column(columnDefinition = "DECIMAL(10,4")
+	private BigDecimal ask;
+	
+	@Size(max=125)
 	private String benchmark;
-	private Timestamp bidListDate;
+	
+	private LocalDateTime bidListDate;
+	
+	@Size(max=125)
 	private String commentary;
+	
+	@Size(max=125)
 	private String security;
+	
+	@Size(max=10)
 	private String status;
+	
+	@Size(max=20)
 	private String trader;
+	
+	@Size(max=125)
 	private String book;
+	
+	@Size(max=125)
 	private String creationName;
-	private Timestamp creationDate;
+	
+	private LocalDateTime creationDate;
+	
+	@Size(max=125)
 	private String revisionName;
-	private Timestamp revisionDate;
+	
+	private LocalDateTime revisionDate;
+	
+	@Size(max=125)
 	private String dealName;
+	
+	@Size(max=125)
 	private String dealType;
+	
+	@Size(max=125)
 	private String sourceListId;
+	
 	private String side;
 	
 	public Integer getId() {
@@ -60,35 +101,35 @@ public class BidList {
 		this.type = type;
 	}
 	
-	public Double getBidQuantity() {
+	public int getBidQuantity() {
 		return bidQuantity;
 	}
 	
-	public void setBidQuantity(Double bidQuantity) {
+	public void setBidQuantity(int bidQuantity) {
 		this.bidQuantity = bidQuantity;
 	}
 	
-	public Double getAskQuantity() {
+	public int getAskQuantity() {
 		return askQuantity;
 	}
 	
-	public void setAskQuantity(Double askQuantity) {
+	public void setAskQuantity(int askQuantity) {
 		this.askQuantity = askQuantity;
 	}
 	
-	public Double getBid() {
+	public BigDecimal getBid() {
 		return bid;
 	}
 	
-	public void setBid(Double bid) {
+	public void setBid(BigDecimal bid) {
 		this.bid = bid;
 	}
 	
-	public Double getAsk() {
+	public BigDecimal getAsk() {
 		return ask;
 	}
 	
-	public void setAsk(Double ask) {
+	public void setAsk(BigDecimal ask) {
 		this.ask = ask;
 	}
 	
@@ -100,11 +141,11 @@ public class BidList {
 		this.benchmark = benchmark;
 	}
 	
-	public Timestamp getBidListDate() {
+	public LocalDateTime getBidListDate() {
 		return bidListDate;
 	}
 	
-	public void setBidListDate(Timestamp bidListDate) {
+	public void setBidListDate(LocalDateTime bidListDate) {
 		this.bidListDate = bidListDate;
 	}
 	
@@ -156,11 +197,11 @@ public class BidList {
 		this.creationName = creationName;
 	}
 	
-	public Timestamp getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 	
-	public void setCreationDate(Timestamp creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 	
@@ -172,11 +213,11 @@ public class BidList {
 		this.revisionName = revisionName;
 	}
 	
-	public Timestamp getRevisionDate() {
+	public LocalDateTime getRevisionDate() {
 		return revisionDate;
 	}
 	
-	public void setRevisionDate(Timestamp revisionDate) {
+	public void setRevisionDate(LocalDateTime revisionDate) {
 		this.revisionDate = revisionDate;
 	}
 	
