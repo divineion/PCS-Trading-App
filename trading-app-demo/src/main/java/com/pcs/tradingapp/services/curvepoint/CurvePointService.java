@@ -1,10 +1,12 @@
 package com.pcs.tradingapp.services.curvepoint;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.pcs.tradingapp.domain.CurvePoint;
+import com.pcs.tradingapp.dto.request.curvepoint.CreateCurvePointDto;
 import com.pcs.tradingapp.dto.response.CurvePointInfoDto;
 import com.pcs.tradingapp.repositories.CurvePointRepository;
 
@@ -25,4 +27,10 @@ public class CurvePointService {
 		return mapper.curvePointsToCurvePointInfoDtos(curvePoints);
 	}
 
+	public void createCurvePoint(CreateCurvePointDto dto) {
+		CurvePoint curvePoint = mapper.createCurvePointDtoToCurvePoint(dto);
+		curvePoint.setCreationDate(LocalDateTime.now());
+		
+		repository.save(curvePoint);
+	}
 }
