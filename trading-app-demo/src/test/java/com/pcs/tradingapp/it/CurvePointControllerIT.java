@@ -1,7 +1,9 @@
 package com.pcs.tradingapp.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -29,5 +31,38 @@ public class CurvePointControllerIT {
     	.andExpect(status().is2xxSuccessful())
     	.andExpect(model().attributeExists("curvePoints"))
     	.andExpect(view().name("curvePoint/list"));
+    }
+    
+    @Test
+    public void testShowAddForm_shouldReturnAddFormView() throws Exception {
+    	mockMvc.perform(get("/curvepoint/add"))
+    		.andExpect(view().name("curvePoint/add"))
+    		.andExpect(model().attributeExists("curvePoint"))
+    		.andExpect(status().is2xxSuccessful());
+    }
+    
+    @Test
+    public void testAddCurvePoint_withValidData_ShouldRedirectToListView() throws Exception {
+    	mockMvc.perform(post("/curvepoint/add")
+    			.param("curveId", "1")
+    			.param("term", "12.2")
+    			.param("value", "1.4")
+			)
+    		
+    		.andExpect(status().is3xxRedirection())
+    		.andExpect(redirectedUrl("/curvepoint/list"));
+    }
+    
+    @Test
+    public void testAddCurvePoint_withInvalidValues_ShouldReturnError() throws Exception {
+    	mockMvc.perform(post("/curvepoint/add")
+    			.param("curveId", "1.2")
+    			.param("term", "12.2")
+    			.param("value", "1.4")
+    			)
+
+    	.andExpect(status().isOk())
+    	.andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"))
+    	.andExpect(view().name("curvePoint/add"));
     }
 }

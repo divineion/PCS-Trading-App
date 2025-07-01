@@ -16,12 +16,17 @@ public class CurvePoint {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(name = "curve_id")
 	private Integer curveId;
+	
 	private LocalDateTime asOfDate;
+	
 	private BigDecimal term;
 	
 	@Column(name = "curve_value")
 	private BigDecimal value;
+	
 	private LocalDateTime creationDate;
 	
 	public Integer getId() {

@@ -8,10 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.CurvePoint;
+import com.pcs.tradingapp.dto.request.curvepoint.CreateCurvePointDto;
 import com.pcs.tradingapp.dto.response.CurvePointInfoDto;
 import com.pcs.tradingapp.services.curvepoint.CurvePointService;
 
@@ -32,14 +34,18 @@ public class CurvePointController {
     }
 
     @GetMapping("/curvepoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addCurvePointForm(CurvePoint curvePoint) {
         return "curvePoint/add";
     }
 
     @PostMapping("/curvepoint/add")
-    public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
-        return "curvePoint/add";
+    public String createCurvePoint(@Valid @ModelAttribute("curvePoint") CreateCurvePointDto curvePoint, BindingResult result, Model model) {
+    	if (result.hasFieldErrors()) {
+    		return "curvePoint/add";
+    	}
+    	service.createCurvePoint(curvePoint);
+    	
+        return "redirect:/curvepoint/list";
     }
 
     @GetMapping("/curvepoint/update/{id}")
@@ -49,14 +55,14 @@ public class CurvePointController {
     }
 
     @PostMapping("/curvepoint/update/{id}")
-    public String updateBid(@PathVariable Integer id, @Valid CurvePoint curvePoint,
+    public String updateCurvePoint(@PathVariable Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Curve and return Curve list
         return "redirect:/curvePoint/list";
     }
 
     @GetMapping("/curvepoint/delete/{id}")
-    public String deleteBid(@PathVariable Integer id, Model model) {
+    public String deleteCurvePoint(@PathVariable Integer id, Model model) {
         // TODO: Find Curve by Id and delete the Curve, return to Curve list
         return "redirect:/curvePoint/list";
     }
