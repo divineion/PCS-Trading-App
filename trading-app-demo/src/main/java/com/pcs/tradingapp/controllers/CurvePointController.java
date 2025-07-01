@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pcs.tradingapp.domain.CurvePoint;
 import com.pcs.tradingapp.dto.request.curvepoint.CreateCurvePointDto;
+import com.pcs.tradingapp.dto.request.curvepoint.UpdateCurvePointDto;
 import com.pcs.tradingapp.dto.response.CurvePointInfoDto;
 import com.pcs.tradingapp.exceptions.CurvePointNotFoundException;
 import com.pcs.tradingapp.services.curvepoint.CurvePointService;
@@ -63,15 +64,20 @@ public class CurvePointController {
     }
 
     @PostMapping("/curvepoint/update/{id}")
-    public String updateCurvePoint(@PathVariable Integer id, @Valid CurvePoint curvePoint,
+    public String updateCurvePoint(@PathVariable Integer id, @Valid @ModelAttribute("curvePoint") UpdateCurvePointDto curvePoint,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
-        return "redirect:/curvePoint/list";
+    	if (result.hasErrors()) {
+    		return "/curvePoint/update";
+    	}
+    	
+        service.updateCurvePoint(curvePoint);
+    	
+        return "redirect:/curvepoint/list";
     }
 
     @GetMapping("/curvepoint/delete/{id}")
     public String deleteCurvePoint(@PathVariable Integer id, Model model) {
         // TODO: Find Curve by Id and delete the Curve, return to Curve list
-        return "redirect:/curvePoint/list";
+        return "redirect:/curvepoint/list";
     }
 }
