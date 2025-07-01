@@ -5,4 +5,5 @@ public class ApiMessages {
 	public static final String USERNAME_ALREADY_EXISTS = "This username already exists";
 	public static final String ROLE_NOT_FOUND = "Role not found";
 	public static final String BIDLIST_NOT_FOUND = "Bid list not found";
+	public static final String CURVEPOINT_NOT_FOUND = "Curve point is not found";
 }
