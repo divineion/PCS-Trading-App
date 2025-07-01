@@ -76,8 +76,12 @@ public class CurvePointController {
     }
 
     @GetMapping("/curvepoint/delete/{id}")
-    public String deleteCurvePoint(@PathVariable Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
-        return "redirect:/curvepoint/list";
+    public String deleteCurvePoint(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+    	try {
+			service.deleteCurvePoint(id);
+		} catch (CurvePointNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+		}
+		return "redirect:/curvepoint/list";
     }
 }
