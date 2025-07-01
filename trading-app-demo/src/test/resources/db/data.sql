@@ -21,8 +21,8 @@ INSERT INTO bid_list (account, type, bid_quantity, ask_quantity, bid, ask, bench
 VALUES ('ACC002', 'FX', 250000.00, 260000.00, 1.1025, 1.1035, 'EUR/USD', '2024-06-21 11:00:00', 'Volatile market conditions', 'SEC-002', 'Closed', 'M. Taylor', 'Book-B', 'user', '2024-06-19 10:00:00', 'jdoe', '2024-06-22 12:00:00', 'Deal-456', 'Spot', 'FX-123', 'Sell');
 
 --Data dor table curve_point
-INSERT INTO curve_point(curve_id, as_of_date, term, `value`, creation_date)
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
 VALUES (1, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
 
-INSERT INTO curve_point(curve_id, as_of_date, term, `value`, creation_date)
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
 VALUES (2, '2025-06-30 10:00:00', 1.0, 0.5, NOW());

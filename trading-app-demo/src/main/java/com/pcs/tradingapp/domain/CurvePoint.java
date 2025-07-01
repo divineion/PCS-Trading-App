@@ -3,6 +3,7 @@ package com.pcs.tradingapp.domain;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,8 @@ public class CurvePoint {
 	private Integer curveId;
 	private LocalDateTime asOfDate;
 	private BigDecimal term;
+	
+	@Column(name = "curve_value")
 	private BigDecimal value;
 	private LocalDateTime creationDate;
 	

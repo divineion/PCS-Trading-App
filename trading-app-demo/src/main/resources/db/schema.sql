@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS curve_point (
   curve_id INT NOT NULL,
   as_of_date DATETIME,
   term DECIMAL(3,1) ,
-  `value` DECIMAL(3,1),
+  curve_value DECIMAL(3,1),
   creation_date DATETIME
   );
 

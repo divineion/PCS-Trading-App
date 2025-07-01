@@ -60,14 +60,14 @@ LIMIT 1;
 
 -- Data for table curve_point
 
-INSERT INTO curve_point(curve_id, as_of_date, term, `value`, creation_date)
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
 SELECT * FROM (SELECT 1, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
 WHERE NOT EXISTS (
 	SELECT 1 FROM  curve_point WHERE curve_id = 1 AND term = 1.0
 )
 LIMIT 1;
 
-INSERT INTO curve_point(curve_id, as_of_date, term, `value`, creation_date)
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
 SELECT * FROM (SELECT 2, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
 WHERE NOT EXISTS (
 	SELECT 1 FROM  curve_point WHERE curve_id = 2 AND term = 1.0
