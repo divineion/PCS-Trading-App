@@ -19,3 +19,10 @@ VALUES ('ACC001', 'Corporate', 150000.75, 155000.589, 99.858, 100.15, 'US Treasu
 
 INSERT INTO bid_list (account, type, bid_quantity, ask_quantity, bid, ask, benchmark, bid_list_date, commentary, security, status, trader, book, creation_name, creation_date, revision_name, revision_date, deal_name, deal_type, source_list_id, side)
 VALUES ('ACC002', 'FX', 250000.00, 260000.00, 1.1025, 1.1035, 'EUR/USD', '2024-06-21 11:00:00', 'Volatile market conditions', 'SEC-002', 'Closed', 'M. Taylor', 'Book-B', 'user', '2024-06-19 10:00:00', 'jdoe', '2024-06-22 12:00:00', 'Deal-456', 'Spot', 'FX-123', 'Sell');
+
+--Data dor table curve_point
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
+VALUES (1, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
+
+INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
+VALUES (2, '2025-06-30 10:00:00', 1.0, 0.5, NOW());

@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS curve_point (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   curve_id INT NOT NULL,
   as_of_date DATETIME,
-  term DECIMAL(10,4),
-  `value` DECIMAL(10,4),
+  term DECIMAL(3,1) ,
+  curve_value DECIMAL(3,1),
   creation_date DATETIME
   );
 

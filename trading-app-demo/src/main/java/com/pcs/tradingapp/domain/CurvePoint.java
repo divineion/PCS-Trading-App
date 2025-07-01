@@ -1,7 +1,9 @@
 package com.pcs.tradingapp.domain;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,16 +11,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "curvepoint")
+@Table(name = "curve_point")
 public class CurvePoint {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer curveId;
-	private Timestamp asOfDate;
-	private Double term;
-	private Double value;
-	private Timestamp creationDate;
+	private LocalDateTime asOfDate;
+	private BigDecimal term;
+	
+	@Column(name = "curve_value")
+	private BigDecimal value;
+	private LocalDateTime creationDate;
 	
 	public Integer getId() {
 		return id;
@@ -36,35 +40,35 @@ public class CurvePoint {
 		this.curveId = curveId;
 	}
 	
-	public Timestamp getAsOfDate() {
+	public LocalDateTime getAsOfDate() {
 		return asOfDate;
 	}
 	
-	public void setAsOfDate(Timestamp asOfDate) {
+	public void setAsOfDate(LocalDateTime asOfDate) {
 		this.asOfDate = asOfDate;
 	}
 	
-	public Double getTerm() {
+	public BigDecimal getTerm() {
 		return term;
 	}
 	
-	public void setTerm(Double term) {
+	public void setTerm(BigDecimal term) {
 		this.term = term;
 	}
 	
-	public Double getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 	
-	public void setValue(Double value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 	
-	public Timestamp getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 	
-	public void setCreationDate(Timestamp creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 }
