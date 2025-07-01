@@ -45,7 +45,10 @@ public class BidListService {
 		repository.save(bidListToUpdate);
 	}
 
-	public void deleteBidList(Integer id) {
+	public void deleteBidList(Integer id) throws BidListNotFoundException {
+		if (repository.findById(id).isEmpty()) {
+			throw new BidListNotFoundException(ApiMessages.BIDLIST_NOT_FOUND);
+		}
 		repository.deleteById(id);		
 	}
 
