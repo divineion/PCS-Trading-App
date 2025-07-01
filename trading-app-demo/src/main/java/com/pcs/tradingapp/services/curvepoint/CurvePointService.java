@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.CurvePoint;
 import com.pcs.tradingapp.dto.request.curvepoint.CreateCurvePointDto;
+import com.pcs.tradingapp.dto.request.curvepoint.UpdateCurvePointDto;
 import com.pcs.tradingapp.dto.response.CurvePointInfoDto;
 import com.pcs.tradingapp.exceptions.CurvePointNotFoundException;
 import com.pcs.tradingapp.repositories.CurvePointRepository;
@@ -40,5 +41,11 @@ public class CurvePointService {
 		CurvePoint curvePoint = repository.findById(id).orElseThrow(() -> new CurvePointNotFoundException(ApiMessages.CURVEPOINT_NOT_FOUND));
 		
 		return mapper.curvePointToCurvePointInfoDto(curvePoint);
+	}
+
+	public void updateCurvePoint(UpdateCurvePointDto curvePoint) {
+		CurvePoint curvePointToUpdate = mapper.updateCurvePointDtoToCurvePoint(curvePoint); 
+		
+		repository.save(curvePointToUpdate);
 	}
 }
