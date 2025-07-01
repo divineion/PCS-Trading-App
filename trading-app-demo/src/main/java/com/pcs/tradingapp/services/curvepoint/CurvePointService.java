@@ -48,4 +48,11 @@ public class CurvePointService {
 		
 		repository.save(curvePointToUpdate);
 	}
+
+	public void deleteCurvePoint(Integer id) throws CurvePointNotFoundException {
+	    if (repository.findById(id).isEmpty()) {
+	        throw new CurvePointNotFoundException(ApiMessages.CURVEPOINT_NOT_FOUND);
+	    }
+	    repository.deleteById(id);
+	}
 }
