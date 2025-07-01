@@ -107,5 +107,19 @@ public class CurvePointControllerIT {
     	.andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"))
     	.andExpect(view().name("/curvePoint/update"));
     }
-
+    
+    @Test
+    public void testDeleteCurvePoint_shouldRedirectToList() throws Exception {
+        mockMvc.perform(get("/curvepoint/delete/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/curvepoint/list"));
+    }
+    
+    @Test
+    public void testDeleteCurvePoint_shouldReturnError() throws Exception {
+        mockMvc.perform(get("/curvepoint/delete/78568"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/curvepoint/list"))
+                .andExpect(flash().attributeExists("errorMsg"));
+    }
 }
