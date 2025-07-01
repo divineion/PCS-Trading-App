@@ -82,5 +82,30 @@ public class CurvePointControllerIT {
                 .andExpect(redirectedUrl("/curvepoint/list"))
                 .andExpect(flash().attributeExists("errorMsg"));
     }
+    
+    @Test
+    public void testUpdateCurvePoint_withValidData_ShouldRedirectToListView() throws Exception {
+    	mockMvc.perform(post("/curvepoint/update/1")
+    			.param("curveId", "54")
+    			.param("term", "15")
+    			.param("value", "1")
+			)
+    		
+    		.andExpect(status().is3xxRedirection())
+    		.andExpect(redirectedUrl("/curvepoint/list"));
+    }
+    
+    @Test
+    public void testUpdateCurvePoint_withInvalidValues_ShouldReturnError() throws Exception {
+    	mockMvc.perform(post("/curvepoint/update/1")
+    			.param("curveId", "1.2")
+    			.param("term", "12.2")
+    			.param("value", "1.4")
+    			)
+
+    	.andExpect(status().isOk())
+    	.andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"))
+    	.andExpect(view().name("/curvePoint/update"));
+    }
 
 }
