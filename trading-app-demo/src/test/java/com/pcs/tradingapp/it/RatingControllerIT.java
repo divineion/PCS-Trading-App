@@ -30,4 +30,12 @@ public class RatingControllerIT {
 			.andExpect(model().attributeExists("ratings"))
 			.andExpect(status().is2xxSuccessful());
 	}
+	
+	@Test
+    public void testShowAddForm_shouldReturnAddFormView() throws Exception {
+    	mockMvc.perform(get("/rating/add"))
+    		.andExpect(view().name("rating/add"))
+    		.andExpect(model().attributeExists("rating"))
+    		.andExpect(status().is2xxSuccessful());
+    }
 }
