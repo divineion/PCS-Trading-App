@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.pcs.tradingapp.domain.Rating;
 import com.pcs.tradingapp.dto.request.rating.CreateRatingDto;
+import com.pcs.tradingapp.dto.request.rating.UpdateRatingDto;
 import com.pcs.tradingapp.dto.response.RatingInfoDto;
+import com.pcs.tradingapp.exceptions.RatingNotFoundException;
 import com.pcs.tradingapp.exceptions.RatingOrderNumberAlreadyExistsException;
 import com.pcs.tradingapp.services.rating.RatingService;
 
@@ -80,8 +82,13 @@ public class RatingController {
     }
 
     @GetMapping("/rating/delete/{id}")
-    public String deleteRating(@PathVariable Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
+    public String deleteRating(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+			service.deleteRating(id);
+		} catch (RatingNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+		}
+        
         return "redirect:/rating/list";
     }
 }
