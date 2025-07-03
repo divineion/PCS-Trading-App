@@ -69,10 +69,14 @@ public class RatingController {
     }
 
     @PostMapping("/rating/update/{id}")
-    public String updateRating(@PathVariable Integer id, @Valid Rating rating,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
-        return "redirect:/rating/list";
+    public String updateRating(@PathVariable Integer id, @Valid @ModelAttribute("rating") UpdateRatingDto rating,
+                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    	if (result.hasErrors()) {
+    		return "rating/update";
+    	}
+		service.updateRating(rating);
+
+    	return "redirect:/rating/list";
     }
 
     @GetMapping("/rating/delete/{id}")
