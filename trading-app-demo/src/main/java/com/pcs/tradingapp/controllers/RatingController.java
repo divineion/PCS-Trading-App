@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.pcs.tradingapp.domain.Rating;
 import com.pcs.tradingapp.dto.request.rating.CreateRatingDto;
 import com.pcs.tradingapp.dto.response.RatingInfoDto;
+import com.pcs.tradingapp.exceptions.RatingOrderNumberAlreadyExistsException;
 import com.pcs.tradingapp.services.rating.RatingService;
 
 @Controller
@@ -38,10 +39,19 @@ public class RatingController {
         return "rating/add";
     }
 
-    @PostMapping("/rating/validate")
-    public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
-        return "rating/add";
+    @PostMapping("/rating/add")
+    public String createRating(@Valid @ModelAttribute("rating") CreateRatingDto rating, BindingResult result, Model model) {
+    	if (result.hasFieldErrors()) {
+    		return "rating/add";
+    	}
+    	
+        try {
+			service.createRating(rating);
+			return "redirect:/rating/list";
+		} catch (RatingOrderNumberAlreadyExistsException e) {
+			result.rejectValue("order", "error.order", e.getMessage());
+			return "rating/add";
+		}
     }
 
     @GetMapping("/rating/update/{id}")
