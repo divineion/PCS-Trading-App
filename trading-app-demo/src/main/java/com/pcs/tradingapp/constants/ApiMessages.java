@@ -13,4 +13,5 @@ public class ApiMessages {
 	public static final String RATING_ORDER_NUMBER_EXISTS = "Rating order number already exists";
 	
 	public static final String RULE_NOT_FOUND = "Rule is not found";
+	public static final String RULE_NAME_ALREADY_EXISTS = "Rule name already exists";
 }
