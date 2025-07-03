@@ -93,10 +93,12 @@ public class UserService {
 	public void updateUser(UpdateUserDto userDto) throws RoleNotFoundException, UserNotFoundException, UsernameAlreadyExistsException {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDto.setPassword(encoder.encode(userDto.getPassword()));
+                
+        User user = repository.findById(userDto.getId()).orElseThrow(() -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
         
-        validateUserExists(userDto.getId());
-        
-		validateUsernameIsAvailable(userDto.getUsername());
+		if (!userDto.getUsername().equals(user.getUsername())) {
+			validateUsernameIsAvailable(userDto.getUsername());
+		}
         
         User userToUpdate = mapper.updateUserDtoToUser(userDto);
         
