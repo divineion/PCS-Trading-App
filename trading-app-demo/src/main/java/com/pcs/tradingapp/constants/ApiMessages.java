@@ -10,5 +10,5 @@ public class ApiMessages {
 	public static final String CURVEPOINT_NOT_FOUND = "Curve point is not found";
 	
 	public static final String RATING_NOT_FOUND = "Rating is not found";
-	public static final String RATING_ORDER_NUMBER_EXISTS = "Rating order nuber already exists";
+	public static final String RATING_ORDER_NUMBER_EXISTS = "Rating order number already exists";
 }
