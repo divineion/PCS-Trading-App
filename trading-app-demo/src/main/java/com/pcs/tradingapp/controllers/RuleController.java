@@ -13,42 +13,40 @@ import com.pcs.tradingapp.domain.Rule;
 
 @Controller
 public class RuleController {
-    // TODO: Inject RuleName service
-
-    @GetMapping("/ruleName/list")
+	
+    @GetMapping("/rule/list")
     public String home(Model model)
     {
-        // TODO: find all RuleName, add to model
-        return "ruleName/list";
+        return "rule/list";
     }
 
-    @GetMapping("/ruleName/add")
+    @GetMapping("/rule/add")
     public String addRuleForm(Rule rule) {
         return "rule/add";
     }
 
-    @PostMapping("/ruleName/validate")
-    public String validate(@Valid Rule ruleName, BindingResult result, Model model) {
+    @PostMapping("/rule/add")
+    public String createRule(@Valid Rule rule, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return RuleName list
         return "rule/add";
     }
 
-    @GetMapping("/ruleName/update/{id}")
+    @GetMapping("/rule/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model) {
         // TODO: get RuleName by Id and to model then show to the form
         return "rule/update";
     }
 
-    @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(@PathVariable Integer id, @Valid Rule ruleName,
+    @PostMapping("/rule/update/{id}")
+    public String updateRule(@PathVariable Integer id, @Valid Rule rule,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-        return "redirect:/ruleName/list";
+        return "redirect:/rule/list";
     }
 
-    @GetMapping("/ruleName/delete/{id}")
-    public String deleteRuleName(@PathVariable Integer id, Model model) {
+    @GetMapping("/rule/delete/{id}")
+    public String deleteRule(@PathVariable Integer id, Model model) {
         // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
-        return "redirect:/ruleName/list";
+        return "redirect:/rule/list";
     }
 }
