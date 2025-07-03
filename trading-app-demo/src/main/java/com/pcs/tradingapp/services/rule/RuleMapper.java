@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 import com.pcs.tradingapp.domain.Rule;
 import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
+import com.pcs.tradingapp.dto.request.rule.UpdateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
 
 @Mapper(componentModel = "spring")
@@ -18,5 +19,8 @@ public interface RuleMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(source = "sql", target = "sqlStr")
-	public Rule createRatingDtoToRating(CreateRuleDto ruleDto);
+	public Rule createRuleDtoToRule(CreateRuleDto ruleDto);
+
+	@Mapping(source = "sql", target = "sqlStr")
+	public Rule updateRuleDtoToRule(UpdateRuleDto ruleDto);
 }
