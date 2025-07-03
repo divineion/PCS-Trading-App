@@ -88,3 +88,32 @@ SELECT * FROM (
 ) AS tmp
 WHERE NOT EXISTS (SELECT 1 FROM rating WHERE order_number = 2)
 LIMIT 1;
+
+-- data for table trading_app
+INSERT INTO trading_rule (name, description, json, template, sql_str, sql_part)
+SELECT * FROM (
+    SELECT
+        'Stop Loss Rule',
+        'Triggers when the price drops below a defined threshold.',
+        '{"threshold": 5, "currency": "USD"}',
+        'IF price < :threshold THEN SELL',
+        'SELECT * FROM trades WHERE price < 5',
+        'price < 5'
+) AS tmp
+WHERE NOT EXISTS (
+    SELECT 1 FROM trading_rule WHERE name = 'Stop Loss Rule'
+) LIMIT 1;
+
+INSERT INTO trading_rule (name, description, json, template, sql_str, sql_part)
+SELECT * FROM (
+    SELECT
+        'Volume Spike Rule',
+        'Alerts when trading volume exceeds the daily average by 200%.',
+        '{"volume_multiplier": 2}',
+        'IF volume > daily_avg * :volume_multiplier THEN ALERT',
+        'SELECT * FROM trades WHERE volume > (SELECT AVG(volume) * 2 FROM trades)',
+        'volume > daily_avg * 2'
+) AS tmp
+WHERE NOT EXISTS (
+    SELECT 1 FROM trading_rule WHERE name = 'Volume Spike Rule'
+) LIMIT 1;
