@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pcs.tradingapp.domain.Rule;
 import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
 import com.pcs.tradingapp.exceptions.RuleNameAlreadyExistsException;
+import com.pcs.tradingapp.exceptions.RuleNotFoundException;
 import com.pcs.tradingapp.services.rule.RuleService;
 
 @Controller
@@ -52,9 +54,16 @@ public class RuleController {
     }
 
     @GetMapping("/rule/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
-        return "rule/update";
+    public String showUpdateForm(@PathVariable Integer id, Model model,
+    		RedirectAttributes redirectAttributes) {
+    	try {
+			RuleInfoDto rule = service.getRuleById(id);
+			model.addAttribute("rule", rule);
+			return "/rule/update";
+		} catch (RuleNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+			return "redirect:/rule/list";
+		}
     }
 
     @PostMapping("/rule/update/{id}")
