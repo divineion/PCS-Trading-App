@@ -55,9 +55,17 @@ public class RatingController {
     }
 
     @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
-        return "rating/update";
+    public String showUpdateForm(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+    	try {
+			RatingInfoDto rating = service.getRatingById(id);
+			model.addAttribute("rating", rating);
+			
+			return "rating/update";
+		} catch (RatingNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+
+		    return "redirect:/rating/list";
+		}        
     }
 
     @PostMapping("/rating/update/{id}")
