@@ -96,7 +96,11 @@ public class UserService {
         
         validateUserExists(userDto.getId());
         
-		validateUsernameIsAvailable(userDto.getUsername());
+        User user = repository.findById(userDto.getId()).orElseThrow(() -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
+        
+		if (!userDto.getUsername().equals(user.getUsername())) {
+			validateUsernameIsAvailable(userDto.getUsername());
+		}
         
         User userToUpdate = mapper.updateUserDtoToUser(userDto);
         
