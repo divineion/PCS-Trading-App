@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS rating (
   moodys_rating VARCHAR(125),
   sand_p_rating VARCHAR(125),
   fitch_rating VARCHAR(125),
-  order_number INT
+  order_number INT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS rule_name (
