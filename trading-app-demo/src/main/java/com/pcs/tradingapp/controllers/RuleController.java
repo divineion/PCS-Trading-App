@@ -2,6 +2,8 @@ package com.pcs.tradingapp.controllers;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,13 +12,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Rule;
+import com.pcs.tradingapp.dto.response.RuleInfoDto;
+import com.pcs.tradingapp.services.rule.RuleService;
 
 @Controller
 public class RuleController {
+	private final RuleService service;
+	
+	public RuleController(RuleService service) {
+		this.service = service;
+	}
 	
     @GetMapping("/rule/list")
-    public String home(Model model)
-    {
+    public String index(Model model) {
+    	List<RuleInfoDto> rules = service.getAllRules();
+    	model.addAttribute("rules", rules);
+    	
         return "rule/list";
     }
 
