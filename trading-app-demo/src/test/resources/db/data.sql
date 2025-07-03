@@ -22,7 +22,14 @@ VALUES ('ACC002', 'FX', 250000.00, 260000.00, 1.1025, 1.1035, 'EUR/USD', '2024-0
 
 --Data dor table curve_point
 INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
-VALUES (1, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
+VALUES (25, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
 
 INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
-VALUES (2, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
+VALUES (54, '2025-06-30 10:00:00', 1.0, 0.5, NOW());
+
+-- Data for table rating
+INSERT INTO rating (moodys_rating, sand_p_rating, fitch_rating, order_number)
+VALUES('Baa1', 'BBB+', 'BBB+', 1);
+
+INSERT INTO rating (moodys_rating, sand_p_rating, fitch_rating, order_number)
+VALUES ('Ba2', 'BB', 'BB', 2);

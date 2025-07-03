@@ -61,15 +61,30 @@ LIMIT 1;
 -- Data for table curve_point
 
 INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
-SELECT * FROM (SELECT 1, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
+SELECT * FROM (SELECT 25, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
 WHERE NOT EXISTS (
 	SELECT 1 FROM  curve_point WHERE curve_id = 1 AND term = 1.0
 )
 LIMIT 1;
 
 INSERT INTO curve_point(curve_id, as_of_date, term, curve_value, creation_date)
-SELECT * FROM (SELECT 2, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
+SELECT * FROM (SELECT 54, '2025-06-30 10:00:00', 1.0, 0.5, NOW()) AS tmp
 WHERE NOT EXISTS (
 	SELECT 1 FROM  curve_point WHERE curve_id = 2 AND term = 1.0
 )
+LIMIT 1;
+
+-- Data for table rating
+INSERT INTO rating (moodys_rating, sand_p_rating, fitch_rating, order_number)
+SELECT * FROM (
+    SELECT 'Baa1' AS moodys_rating, 'BBB+' AS sand_p_rating, 'BBB+' AS fitch_rating, 1 AS order_number
+) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM rating WHERE order_number = 1)
+LIMIT 1;
+
+INSERT INTO rating (moodys_rating, sand_p_rating, fitch_rating, order_number)
+SELECT * FROM (
+    SELECT 'Ba2' AS moodys_rating, 'BB' AS sand_p_rating, 'BB' AS fitch_rating, 2 AS order_number
+) AS tmp
+WHERE NOT EXISTS (SELECT 1 FROM rating WHERE order_number = 2)
 LIMIT 1;

@@ -7,16 +7,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "rating")
 public class Rating {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Integer id;
+	
+	@Column(name="moodys_rating")
 	private String moodysRating;
+	
+	@Column(name = "sand_p_rating")
 	private String sandPRating;
+	
+	@Column(name = "fitch_rating")
 	private String fitchRating;
+	
+	@Column(name = "order_number")
 	private Integer orderNumber;
 
 	public Integer getId() {
@@ -35,7 +42,6 @@ public class Rating {
 		this.moodysRating = moodysRating;
 	}
 	
-	@Column(name = "sand_p_rating")
 	public String getSandPRating() {
 		return sandPRating;
 	}
