@@ -2,6 +2,8 @@ package com.pcs.tradingapp.controllers;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,16 +12,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Rating;
+import com.pcs.tradingapp.dto.response.RatingInfoDto;
+import com.pcs.tradingapp.services.rating.RatingService;
 
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
+    private final RatingService service;
+    
+    public RatingController(RatingService service) {
+    	this.service = service;
+    }
 
     @GetMapping("/rating/list")
-    public String home(Model model)
-    {
-        // TODO: find all Rating, add to model
-        return "rating/list";
+    public String index(Model model) {
+    	List<RatingInfoDto> ratings = service.getAllRatings();
+    	model.addAttribute("ratings", ratings);
+        
+    	return "rating/list";
     }
 
     @GetMapping("/rating/add")
