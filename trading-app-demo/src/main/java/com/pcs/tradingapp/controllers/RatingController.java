@@ -8,10 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Rating;
+import com.pcs.tradingapp.dto.request.rating.CreateRatingDto;
 import com.pcs.tradingapp.dto.response.RatingInfoDto;
 import com.pcs.tradingapp.services.rating.RatingService;
 
@@ -32,7 +34,7 @@ public class RatingController {
     }
 
     @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
+    public String addRatingForm(@ModelAttribute("rating") CreateRatingDto rating) {
         return "rating/add";
     }
 
