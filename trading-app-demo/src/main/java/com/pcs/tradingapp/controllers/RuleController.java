@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.pcs.tradingapp.domain.Rule;
 import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
+import com.pcs.tradingapp.exceptions.RuleNameAlreadyExistsException;
 import com.pcs.tradingapp.services.rule.RuleService;
 
 @Controller
@@ -39,9 +40,15 @@ public class RuleController {
     }
 
     @PostMapping("/rule/add")
-    public String createRule(@Valid Rule rule, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
-        return "rule/add";
+    public String createRule(@Valid @ModelAttribute("rule") CreateRuleDto rule, BindingResult result, Model model) {
+    	try {
+			service.createRule(rule);
+			
+			return "redirect:/rule/list";
+		} catch (RuleNameAlreadyExistsException e) {
+			result.rejectValue("name", null, e.getMessage());
+			return "rule/add";
+		}
     }
 
     @GetMapping("/rule/update/{id}")
