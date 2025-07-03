@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 import com.pcs.tradingapp.domain.Rating;
 import com.pcs.tradingapp.dto.request.rating.CreateRatingDto;
+import com.pcs.tradingapp.dto.request.rating.UpdateRatingDto;
 import com.pcs.tradingapp.dto.response.RatingInfoDto;
 
 @Mapper(componentModel = "spring")
@@ -19,4 +20,7 @@ public interface RatingMapper {
 	@Mapping(source = "order", target = "orderNumber")
 	@Mapping(target = "id", ignore = true)
 	public Rating createRatingDtoToRating(CreateRatingDto ratingDto);
+
+	@Mapping(source = "order", target = "orderNumber")
+	public Rating updateRatingDtoToRating(UpdateRatingDto ratingDto);
 }
