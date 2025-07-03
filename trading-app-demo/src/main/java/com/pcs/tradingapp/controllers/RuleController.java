@@ -24,19 +24,19 @@ public class RuleController {
 
     @GetMapping("/ruleName/add")
     public String addRuleForm(Rule rule) {
-        return "ruleName/add";
+        return "rule/add";
     }
 
     @PostMapping("/ruleName/validate")
     public String validate(@Valid Rule ruleName, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return RuleName list
-        return "ruleName/add";
+        return "rule/add";
     }
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model) {
         // TODO: get RuleName by Id and to model then show to the form
-        return "ruleName/update";
+        return "rule/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
