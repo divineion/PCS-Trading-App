@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.pcs.tradingapp.domain.RuleName;
+import com.pcs.tradingapp.domain.Rule;
 
 @Controller
-public class RuleNameController {
+public class RuleController {
     // TODO: Inject RuleName service
 
     @GetMapping("/ruleName/list")
@@ -23,12 +23,12 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm(Rule rule) {
         return "ruleName/add";
     }
 
     @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
+    public String validate(@Valid Rule ruleName, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return RuleName list
         return "ruleName/add";
     }
@@ -40,7 +40,7 @@ public class RuleNameController {
     }
 
     @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(@PathVariable Integer id, @Valid RuleName ruleName,
+    public String updateRuleName(@PathVariable Integer id, @Valid Rule ruleName,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update RuleName and return RuleName list
         return "redirect:/ruleName/list";
