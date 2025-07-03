@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS rating (
   UNIQUE INDEX unique_order_number (order_number)
 );
 
-CREATE TABLE IF NOT EXISTS rule_name (
+CREATE TABLE IF NOT EXISTS trading_rule (
   id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(125),
   description VARCHAR(125),
