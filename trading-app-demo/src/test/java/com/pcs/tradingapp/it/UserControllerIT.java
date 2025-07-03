@@ -95,10 +95,11 @@ public class UserControllerIT {
     }
     
     @Test
-    public void  testShowUpdateForm_WithUnknownUserParameter_ShouldReturnErrorPage() throws Exception {
+    public void  testShowUpdateForm_WithUnknownUserParameter_shouldRedirectToListViewWithErrorMessage() throws Exception {
     	mockMvc.perform(get("/user/update/999"))
-    		.andExpect(status().is2xxSuccessful())
-    		.andExpect(view().name("error"));
+    		.andExpect(status().is3xxRedirection())
+    		.andExpect(flash().attributeExists("errorMsg"))
+    		.andExpect(redirectedUrl("/user/list"));
     }
     
     @Test
@@ -131,7 +132,7 @@ public class UserControllerIT {
     
     @Test
     public void testUpdateUser_withUnavailableUsername_shouldReturnUpdateViewWithErrors() throws Exception {
-    	mockMvc.perform(post("/user/update/1")
+    	mockMvc.perform(post("/user/update/2")
     			.param("fullname", "Administrator")
     			.param("username", "admin")
     			.param("role", "ADMIN")
@@ -144,7 +145,7 @@ public class UserControllerIT {
     }
     
     @Test
-    public void testUpdateUser_withUnkownUser_shouldReturnErrorPage() throws Exception {
+    public void testUpdateUser_withUnknownUser_shouldRedirectToListViewWithErrorMessage() throws Exception {
     	mockMvc.perform(post("/user/update/19")
     				.param("fullname", "Main Administrator")
     				.param("username", "MainAdmin")
@@ -153,6 +154,7 @@ public class UserControllerIT {
     			)
     	
     		.andExpect(status().is3xxRedirection())
+    		.andExpect(flash().attributeExists("errorMsg"))
     		.andExpect(redirectedUrl("/user/list"));
     }
     
@@ -165,11 +167,12 @@ public class UserControllerIT {
     }
     
     @Test
-    public void testDeleteUser_shouldRedirectToErrorView() throws Exception {
+    public void testDeleteUser_shouldRedirectToListViewWithErrorMessage() throws Exception {
     	mockMvc.perform(get("/user/delete/999"))
     	
-    	.andExpect(status().is2xxSuccessful())
-    	.andExpect(view().name("error"));
+    	.andExpect(status().is3xxRedirection())
+    	.andExpect(flash().attributeExists("errorMsg"))
+    	.andExpect(redirectedUrl("/user/list"));
     }
     
     /**
@@ -182,7 +185,7 @@ public class UserControllerIT {
      * @see RoleName
      */
     @Test
-    public void testAddUser_WithUnknownRole_ShouldReturnInternalServerError() throws Exception {
+    public void testAddUser_WithUnknownRole_ShouldReturnUpdateFormWithError() throws Exception {
         mockMvc.perform(post("/user/add")
         		.param("fullname", "Valid Fullname")
                 .param("username", "SomeUsername") 
@@ -190,6 +193,8 @@ public class UserControllerIT {
                 .param("role", "admin")
     		)
         
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("user", "role"))
+                .andExpect(view().name("user/add"));
     }
 }
