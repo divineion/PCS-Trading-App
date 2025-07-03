@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.Rating;
 import com.pcs.tradingapp.dto.request.rating.CreateRatingDto;
+import com.pcs.tradingapp.dto.request.rating.UpdateRatingDto;
 import com.pcs.tradingapp.dto.response.RatingInfoDto;
 import com.pcs.tradingapp.exceptions.RatingNotFoundException;
 import com.pcs.tradingapp.exceptions.RatingOrderNumberAlreadyExistsException;
@@ -42,5 +43,19 @@ public class RatingService {
 		
 		Rating rating = mapper.createRatingDtoToRating(ratingDto);
 		repository.save(rating);
+	}
+
+	public void updateRating(UpdateRatingDto ratingDto) {
+		Rating rating = mapper.updateRatingDtoToRating(ratingDto);
+		
+		repository.save(rating);
+	}
+
+	public void deleteRating(Integer id) throws RatingNotFoundException {
+		if (repository.findById(id).isEmpty()) {
+			throw new RatingNotFoundException(ApiMessages.RATING_NOT_FOUND);
+		}
+		
+		repository.deleteById(id);
 	}
 }
