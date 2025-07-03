@@ -8,10 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Rule;
+import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
 import com.pcs.tradingapp.services.rule.RuleService;
 
@@ -32,7 +34,7 @@ public class RuleController {
     }
 
     @GetMapping("/rule/add")
-    public String addRuleForm(Rule rule) {
+    public String addRuleForm(@ModelAttribute("rule") CreateRuleDto rule) {
         return "rule/add";
     }
 
