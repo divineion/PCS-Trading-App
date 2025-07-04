@@ -78,14 +78,14 @@ CREATE TABLE IF NOT EXISTS rating (
   order_number INT NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS rule_name (
+CREATE TABLE IF NOT EXISTS trading_rule (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(125),
+  name VARCHAR(125) NOT NULL UNIQUE,
   description VARCHAR(125),
-  json VARCHAR(255),
-  template VARCHAR(512),
-  sql_str VARCHAR(125),
-  sql_part VARCHAR(125)
+  json TEXT,
+  template TEXT,
+  sql_str TEXT,
+  sql_part TEXT
 );
 
 CREATE TABLE IF NOT EXISTS app_user (

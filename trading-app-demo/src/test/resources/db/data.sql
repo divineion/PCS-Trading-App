@@ -33,3 +33,25 @@ VALUES('Baa1', 'BBB+', 'BBB+', 1);
 
 INSERT INTO rating (moodys_rating, sand_p_rating, fitch_rating, order_number)
 VALUES ('Ba2', 'BB', 'BB', 2);
+
+-- data for table trading_rule
+INSERT INTO trading_rule (name, description, json, template, sql_str, sql_part)
+VALUES (
+  'Stop Loss Rule',
+  'Triggers when the price drops below a defined threshold.',
+  '{"threshold": 5, "currency": "USD"}',
+  'IF price < :threshold THEN SELL',
+  'SELECT * FROM trades WHERE price < 5',
+  'price < 5'
+);
+
+INSERT INTO trading_rule (name, description, json, template, sql_str, sql_part)
+VALUES (
+  'Volume Spike Rule',
+  'Alerts when trading volume exceeds the daily average by 200%.',
+  '{"volume_multiplier": 2}',
+  'IF volume > daily_avg * :volume_multiplier THEN ALERT',
+  'SELECT * FROM trades WHERE volume > (SELECT AVG(volume) * 2 FROM trades)',
+  'volume > daily_avg * 2'
+);
+
