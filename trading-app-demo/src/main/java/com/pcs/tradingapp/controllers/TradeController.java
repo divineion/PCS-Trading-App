@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pcs.tradingapp.domain.Trade;
 import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
+import com.pcs.tradingapp.exceptions.TradeNotFoundException;
 import com.pcs.tradingapp.servicestrade.TradeService;
 
 import jakarta.validation.Valid;
@@ -49,9 +51,18 @@ public class TradeController {
     }
 
     @GetMapping("/trade/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id, Model model) {
+    public String showUpdateForm(@PathVariable Integer id, RedirectAttributes redirectAttributes, Model model) {
         // TODO: get Trade by Id and to model then show to the form
-        return "trade/update";
+    	try {
+			TradeInfoDto trade = service.getTradeById(id);
+			model.addAttribute("trade", trade);
+			
+			return "trade/update";
+		} catch (TradeNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+			
+			return "redirect:/trade/list";
+		}
     }
 
     @PostMapping("/trade/update/{id}")
