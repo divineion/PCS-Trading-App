@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Trade;
+import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
 import com.pcs.tradingapp.servicestrade.TradeService;
 
@@ -36,10 +37,15 @@ public class TradeController {
         return "trade/add";
     }
 
-    @PostMapping("/trade/validate")
-    public String validate(@Valid Trade trade, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Trade list
-        return "trade/add";
+    @PostMapping("/trade/add")
+    public String createTrade(@Valid @ModelAttribute("trade") CreateTradeDto trade, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+        	return "trade/add";
+        }
+        
+        service.createTrade(trade);
+        
+        return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/update/{id}")
