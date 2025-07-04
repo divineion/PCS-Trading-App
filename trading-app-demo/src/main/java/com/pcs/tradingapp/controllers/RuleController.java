@@ -90,8 +90,13 @@ public class RuleController {
     }
 
     @GetMapping("/rule/delete/{id}")
-    public String deleteRule(@PathVariable Integer id, Model model) {
-        // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
+    public String deleteRule(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+			service.deleteRule(id);
+		} catch (RuleNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+		}
+        
         return "redirect:/rule/list";
     }
 }
