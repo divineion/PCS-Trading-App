@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.Rule;
 import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
+import com.pcs.tradingapp.dto.request.rule.UpdateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
 import com.pcs.tradingapp.exceptions.RuleNameAlreadyExistsException;
 import com.pcs.tradingapp.exceptions.RuleNotFoundException;
@@ -22,6 +23,14 @@ public class RuleService {
 		this.mapper = mapper;
 		this.repository = repository;
 	}
+	
+	public boolean validateRuleNameIsAvailable(String name) throws RuleNameAlreadyExistsException {
+		if (repository.findByName(name).isPresent()) {
+			throw new RuleNameAlreadyExistsException(ApiMessages.RULE_NAME_ALREADY_EXISTS);
+		}
+		
+		return true;
+	}
 
 	public List<RuleInfoDto> getAllRules() {
 		List<Rule> rules = repository.findAll();
@@ -36,13 +45,30 @@ public class RuleService {
 	}
 
 	public void createRule(CreateRuleDto ruleDto) throws RuleNameAlreadyExistsException {
-		if (repository.findByName(ruleDto.getName()).isPresent()) {
-			throw new RuleNameAlreadyExistsException(ApiMessages.RULE_NAME_ALREADY_EXISTS);
-		}
+		validateRuleNameIsAvailable(ruleDto.getName());
 		
-		Rule rule = mapper.createRatingDtoToRating(ruleDto);
+		Rule rule = mapper.createRuleDtoToRule(ruleDto);
 		repository.save(rule);
 		
 	}
 
+	public void updateRule(UpdateRuleDto ruleDto) throws RuleNameAlreadyExistsException, RuleNotFoundException {
+		Rule rule = repository.findById(ruleDto.getId()).orElseThrow(() -> new RuleNotFoundException(ApiMessages.RULE_NOT_FOUND));
+	        
+		if (!ruleDto.getName().equals(rule.getName())) {
+			validateRuleNameIsAvailable(ruleDto.getName());
+		}
+	    
+        Rule ruleToUpdate = mapper.updateRuleDtoToRule(ruleDto);
+
+        repository.save(ruleToUpdate);
+    }
+
+	public void deleteRule(Integer id) throws RuleNotFoundException {
+		if (repository.findById(id).isEmpty()) {
+			throw new RuleNotFoundException(ApiMessages.RULE_NOT_FOUND);
+		}
+		
+		repository.deleteById(id);
+	}
 }
