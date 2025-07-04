@@ -1,29 +1,38 @@
 package com.pcs.tradingapp.controllers;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.pcs.tradingapp.domain.Trade;
+import com.pcs.tradingapp.dto.response.TradeInfoDto;
+import com.pcs.tradingapp.servicestrade.TradeService;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class TradeController {
-    // TODO: Inject Trade service
+    private final TradeService service;
+    
+    public TradeController(TradeService service) {
+    	this.service = service;
+    }
 
     @GetMapping("/trade/list")
-    public String home(Model model)
-    {
-        // TODO: find all Trade, add to model
+    public String home(Model model) {
+        List<TradeInfoDto> trades = service.getAllTrades();
+        model.addAttribute("trades", trades);
         return "trade/list";
     }
 
     @GetMapping("/trade/add")
-    public String addUser(Trade bid) {
+    public String addTradeForm(@ModelAttribute("trade") CreateTradeDto trade) {
         return "trade/add";
     }
 
