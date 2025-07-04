@@ -2,6 +2,7 @@ package com.pcs.tradingapp.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -82,7 +83,7 @@ public class RuleControllerIT {
     public void testShowUpdateForm_withExistingId_shouldReturnUpdateView() throws Exception {
         mockMvc.perform(get("/rule/update/1"))
             .andExpect(status().isOk())
-            .andExpect(view().name("/rule/update"))
+            .andExpect(view().name("rule/update"))
             .andExpect(model().attributeExists("rule"));
     }
 
@@ -118,6 +119,31 @@ public class RuleControllerIT {
             .andExpect(status().isOk())
             .andExpect(view().name("rule/update"));
     }
+    
+    @Test
+    public void testUpdateRule_withUnknownId_shouldRedirectWithErrorMessage() throws Exception {
+    	mockMvc.perform(post("/rule/update/222")
+    	 .param("id", "11111")
+         .param("name", "AnyName")
+         .param("description", "desc")
+         .param("json", "{}"))
+    	.andExpect(status().is3xxRedirection())
+    	.andExpect(flash().attributeExists("errorMsg"))
+    	.andExpect(redirectedUrl("/rule/list"))
+    	.andDo(print());
+    }
+    
+    @Test
+    public void testUpdateRule_withExistingName_shouldRedirectWithErrorMessage() throws Exception {
+    	mockMvc.perform(post("/rule/update/1")
+    			.param("id", "1")
+    			.param("name", "Volume Spike Rule")
+    			.param("description", "desc")
+    			.param("json", "{}"))
+    	.andExpect(status().isOk())
+    	.andExpect(view().name("rule/update"))
+    	.andExpect(model().attributeHasFieldErrors("rule", "name"));
+    }
 
     @Test
     public void testDeleteRule_shouldRedirectToList() throws Exception {
@@ -127,7 +153,7 @@ public class RuleControllerIT {
     }
 
     @Test
-    public void testDeleteRule_shouldThrowException() throws Exception {
+    public void testDeleteRule_withUnknownId_shouldRedirectWithErrorMessage() throws Exception {
         mockMvc.perform(get("/rule/delete/999"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/rule/list"))
