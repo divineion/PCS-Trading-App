@@ -6,7 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -17,20 +18,20 @@ public class Trade {
 	private Integer id;
 	private String account;
 	private String type;
-	private Double buyQuantity;
-	private Double sellQuantity;
-	private Double buyPrice;
-	private Double sellPrice;
+	private BigDecimal buyQuantity;
+	private BigDecimal sellQuantity;
+	private BigDecimal buyPrice;
+	private BigDecimal sellPrice;
 	private String benchmark;
-	private Timestamp tradeDate;
+	private LocalDateTime tradeDate;
 	private String security;
 	private String status;
 	private String trader;
 	private String book;
 	private String creationName;
-	private Timestamp creationDate;
+	private LocalDateTime creationDate;
 	private String revisionName;
-	private Timestamp revisionDate;
+	private LocalDateTime revisionDate;
 	private String dealName;
 	private String dealType;
 	private String sourceListId;
@@ -60,35 +61,35 @@ public class Trade {
 		this.type = type;
 	}
 	
-	public Double getBuyQuantity() {
+	public BigDecimal getBuyQuantity() {
 		return buyQuantity;
 	}
 	
-	public void setBuyQuantity(Double buyQuantity) {
+	public void setBuyQuantity(BigDecimal buyQuantity) {
 		this.buyQuantity = buyQuantity;
 	}
 	
-	public Double getSellQuantity() {
+	public BigDecimal getSellQuantity() {
 		return sellQuantity;
 	}
 	
-	public void setSellQuantity(Double sellQuantity) {
+	public void setSellQuantity(BigDecimal sellQuantity) {
 		this.sellQuantity = sellQuantity;
 	}
 	
-	public Double getBuyPrice() {
+	public BigDecimal getBuyPrice() {
 		return buyPrice;
 	}
 	
-	public void setBuyPrice(Double buyPrice) {
+	public void setBuyPrice(BigDecimal buyPrice) {
 		this.buyPrice = buyPrice;
 	}
 	
-	public Double getSellPrice() {
+	public BigDecimal getSellPrice() {
 		return sellPrice;
 	}
 	
-	public void setSellPrice(Double sellPrice) {
+	public void setSellPrice(BigDecimal sellPrice) {
 		this.sellPrice = sellPrice;
 	}
 	
@@ -100,11 +101,11 @@ public class Trade {
 		this.benchmark = benchmark;
 	}
 	
-	public Timestamp getTradeDate() {
+	public LocalDateTime getTradeDate() {
 		return tradeDate;
 	}
 	
-	public void setTradeDate(Timestamp tradeDate) {
+	public void setTradeDate(LocalDateTime tradeDate) {
 		this.tradeDate = tradeDate;
 	}
 	
@@ -148,11 +149,11 @@ public class Trade {
 		this.creationName = creationName;
 	}
 	
-	public Timestamp getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 	
-	public void setCreationDate(Timestamp creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 	
@@ -164,11 +165,11 @@ public class Trade {
 		this.revisionName = revisionName;
 	}
 	
-	public Timestamp getRevisionDate() {
+	public LocalDateTime getRevisionDate() {
 		return revisionDate;
 	}
 	
-	public void setRevisionDate(Timestamp revisionDate) {
+	public void setRevisionDate(LocalDateTime revisionDate) {
 		this.revisionDate = revisionDate;
 	}
 	
