@@ -55,3 +55,7 @@ VALUES (
   'volume > daily_avg * 2'
 );
 
+-- data for table trade
+INSERT INTO trade (id, account, type, buy_quantity) VALUES (1, 'ACC001', 'BUY', 100);
+INSERT INTO trade (id, account, type, buy_quantity) VALUES (2, 'ACC002', 'SELL', 50);
+
