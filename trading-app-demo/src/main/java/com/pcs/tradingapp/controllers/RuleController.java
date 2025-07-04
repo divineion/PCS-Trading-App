@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.pcs.tradingapp.domain.Rule;
 import com.pcs.tradingapp.dto.request.rule.CreateRuleDto;
+import com.pcs.tradingapp.dto.request.rule.UpdateRuleDto;
 import com.pcs.tradingapp.dto.response.RuleInfoDto;
 import com.pcs.tradingapp.exceptions.RuleNameAlreadyExistsException;
 import com.pcs.tradingapp.exceptions.RuleNotFoundException;
@@ -71,9 +71,21 @@ public class RuleController {
     }
 
     @PostMapping("/rule/update/{id}")
-    public String updateRule(@PathVariable Integer id, @Valid Rule rule,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
+    public String updateRule(@PathVariable Integer id, @Valid @ModelAttribute("rule") UpdateRuleDto rule,
+                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    	if (result.hasErrors()) {
+            return "rule/add";
+        }
+    	
+    	try {
+			service.updateRule(rule);
+		} catch (RuleNameAlreadyExistsException e) {
+			result.rejectValue("name", null, e.getMessage());
+			
+			return "rule/update";
+		} catch (RuleNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+		}
         return "redirect:/rule/list";
     }
 
