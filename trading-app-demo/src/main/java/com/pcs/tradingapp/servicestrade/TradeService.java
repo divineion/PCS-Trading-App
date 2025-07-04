@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.Trade;
 import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
+import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
 import com.pcs.tradingapp.exceptions.TradeNotFoundException;
 import com.pcs.tradingapp.repositories.TradeRepository;
@@ -29,13 +30,23 @@ public class TradeService {
 	
 	public TradeInfoDto getTradeById(int id) throws TradeNotFoundException {
 		Trade trade = repository.findById(id)
-				.orElseThrow(() -> new TradeNotFoundException(ApiMessages.RULE_NOT_FOUND));
+				.orElseThrow(() -> new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND));
 
 		return mapper.tradeToTradeInfoDto(trade);
 	}
 
 	public void createTrade(CreateTradeDto tradeDto) {
 		Trade trade = mapper.createTradeDtoToTrade(tradeDto);
+		
+		repository.save(trade);
+	}
+
+	public void updateTrade(UpdateTradeDto tradeDto) throws TradeNotFoundException {
+		if (repository.findById(tradeDto.getId()).isEmpty()) {
+			throw new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND);
+		}
+		
+		Trade trade = mapper.updateTradeDtoToTrade(tradeDto);
 		
 		repository.save(trade);
 	}
