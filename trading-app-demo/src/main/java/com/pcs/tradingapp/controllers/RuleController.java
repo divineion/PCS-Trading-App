@@ -74,7 +74,7 @@ public class RuleController {
     public String updateRule(@PathVariable Integer id, @Valid @ModelAttribute("rule") UpdateRuleDto rule,
                              BindingResult result, Model model, RedirectAttributes redirectAttributes) {
     	if (result.hasErrors()) {
-            return "rule/add";
+            return "rule/update";
         }
     	
     	try {
