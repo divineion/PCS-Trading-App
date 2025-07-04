@@ -2,16 +2,15 @@ package com.pcs.tradingapp.dto.request.trade;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateTradeDto {
 	@Size(max=30)
-	@Column(nullable=false)
+	@NotBlank(message = "Account is mandatory.")
 	private String account;
 	
-	@Size(max=30)
-	@Column(nullable=false)
+	@Size(max=30, message = "max 30 characters")
 	private String type;
 	
 	private BigDecimal buyQuantity;
