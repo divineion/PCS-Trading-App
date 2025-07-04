@@ -185,7 +185,7 @@ public class UserControllerIT {
      * @see RoleName
      */
     @Test
-    public void testAddUser_WithUnknownRole_ShouldReturnUpdateFormWithError() throws Exception {
+    public void testAddUser_WithUnknownRole_ShouldReturnAddFormWithError() throws Exception {
         mockMvc.perform(post("/user/add")
         		.param("fullname", "Valid Fullname")
                 .param("username", "SomeUsername") 
@@ -196,5 +196,19 @@ public class UserControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("user", "role"))
                 .andExpect(view().name("user/add"));
+    }
+    
+    @Test
+    public void testUpdateUser_WithUnknownRole_ShouldReturnUpdateFormWithError() throws Exception {
+    	mockMvc.perform(post("/user/update/1")
+    			.param("fullname", "Valid Fullname")
+    			.param("username", "SomeUsername") 
+    			.param("password", "V@lidP@ssw0rd")
+    			.param("role", "admin")
+    			)
+    	
+    	.andExpect(status().isOk())
+    	.andExpect(model().attributeHasFieldErrors("user", "role"))
+    	.andExpect(view().name("user/update"));
     }
 }
