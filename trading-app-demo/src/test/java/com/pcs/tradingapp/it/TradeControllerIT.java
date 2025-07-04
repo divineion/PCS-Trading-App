@@ -115,4 +115,19 @@ public class TradeControllerIT {
 	    	.andExpect(view().name("trade/update"))
 	    	.andExpectAll(model().attributeHasFieldErrors("trade", "buyQuantity"));
 	    }
+	    
+	    @Test
+	    public void testDeleteTrade_shouldRedirectToList() throws Exception {
+	        mockMvc.perform(get("/trade/delete/1"))
+	                .andExpect(status().is3xxRedirection())
+	                .andExpect(redirectedUrl("/trade/list"));
+	    }
+	    
+	    @Test
+	    public void testDeleteTrade_shouldThrowException() throws Exception {
+	        mockMvc.perform(get("/trade/delete/321"))
+	                .andExpect(status().is3xxRedirection())
+	                .andExpect(redirectedUrl("/trade/list"))
+	                .andExpect(flash().attributeExists("errorMsg"));
+	    }
    }
