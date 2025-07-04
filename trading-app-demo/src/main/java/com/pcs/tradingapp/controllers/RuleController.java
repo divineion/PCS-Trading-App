@@ -63,7 +63,7 @@ public class RuleController {
     	try {
 			RuleInfoDto rule = service.getRuleById(id);
 			model.addAttribute("rule", rule);
-			return "/rule/update";
+			return "rule/update";
 		} catch (RuleNotFoundException e) {
 			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
 			return "redirect:/rule/list";
