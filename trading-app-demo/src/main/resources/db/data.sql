@@ -117,3 +117,17 @@ SELECT * FROM (
 WHERE NOT EXISTS (
     SELECT 1 FROM trading_rule WHERE name = 'Volume Spike Rule'
 ) LIMIT 1;
+
+-- data for table trade
+INSERT INTO trade (account, type, buy_quantity)
+SELECT 'ACC001', 'BUY', 100
+WHERE NOT EXISTS (
+    SELECT 1 FROM trade WHERE account = 'ACC001' AND type = 'BUY' AND buy_quantity = 100
+);
+
+INSERT INTO trade (account, type, buy_quantity)
+SELECT 'ACC002', 'SELL', 50
+WHERE NOT EXISTS (
+    SELECT 1 FROM trade WHERE account = 'ACC002' AND type = 'SELL' AND buy_quantity = 50
+);
+

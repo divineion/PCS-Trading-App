@@ -14,4 +14,6 @@ public class ApiMessages {
 	
 	public static final String RULE_NOT_FOUND = "Rule is not found";
 	public static final String RULE_NAME_ALREADY_EXISTS = "Rule name already exists";
+	
+	public static final String TRADE_NOT_FOUND = "Trade is not found";
 }
