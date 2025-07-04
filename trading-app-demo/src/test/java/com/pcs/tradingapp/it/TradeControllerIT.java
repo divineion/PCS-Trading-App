@@ -106,6 +106,17 @@ public class TradeControllerIT {
 	    }
 
 	    @Test
+	    public void testUpdateTrade_withUnknownId_shouldRedirectToList() throws Exception {
+	    	mockMvc.perform(post("/trade/update/178")
+	    			.param("account", "anyACC")
+	    			.param("type", "sell")
+	    			.param("buyQuantity", "80"))
+	    	.andExpect(status().is3xxRedirection())
+	    	.andExpect(flash().attributeExists("errorMsg"))
+	    	.andExpect(redirectedUrl("/trade/list"));
+	    }
+
+	    @Test
 	    public void testUpdateTrade_withInValidData_shouldReturnUpdateViewWithError() throws Exception {
 	    	mockMvc.perform(post("/trade/update/1")
 	    			.param("account", "anyACC")
