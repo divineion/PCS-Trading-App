@@ -43,6 +43,10 @@ public class RuleController {
 
     @PostMapping("/rule/add")
     public String createRule(@Valid @ModelAttribute("rule") CreateRuleDto rule, BindingResult result, Model model) {
+    	if (result.hasErrors()) {
+            return "rule/add";
+        }
+    	
     	try {
 			service.createRule(rule);
 			
