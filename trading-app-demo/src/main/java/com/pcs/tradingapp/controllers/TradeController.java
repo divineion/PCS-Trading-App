@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pcs.tradingapp.domain.Trade;
 import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
+import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
 import com.pcs.tradingapp.exceptions.TradeNotFoundException;
 import com.pcs.tradingapp.servicestrade.TradeService;
@@ -66,10 +67,20 @@ public class TradeController {
     }
 
     @PostMapping("/trade/update/{id}")
-    public String updateTrade(@PathVariable Integer id, @Valid Trade trade,
-                             BindingResult result, Model model) {
+    public String updateTrade(@PathVariable Integer id, @Valid @ModelAttribute("trade") UpdateTradeDto trade,
+                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         // TODO: check required fields, if valid call service to update Trade and return Trade list
-        return "redirect:/trade/list";
+    	if (result.hasErrors()) {
+    		return "trade/update";
+    	}
+    	
+    	try {
+			service.updateTrade(trade);
+		} catch (TradeNotFoundException e) {
+			redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+		}
+    	
+    	return "redirect:/trade/list";
     }
 
     @GetMapping("/trade/delete/{id}")
