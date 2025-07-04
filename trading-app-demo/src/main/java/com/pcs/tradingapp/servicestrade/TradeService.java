@@ -50,5 +50,13 @@ public class TradeService {
 		
 		repository.save(trade);
 	}
+
+	public void deleteTrade(int id) throws TradeNotFoundException {
+		if (repository.findById(id).isEmpty()) {
+			throw new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND);
+		}
+		
+		repository.deleteById(id);
+	}
 	
 }
