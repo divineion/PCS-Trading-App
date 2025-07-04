@@ -3,6 +3,7 @@ package com.pcs.tradingapp.it;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,7 +51,6 @@ public class TradeControllerIT {
 	                        .param("type", "sell")
 	        				.param("buyQuantity", "10"))
 	                .andExpect(status().is3xxRedirection())
-	                .andDo(print())
 	                .andExpect(redirectedUrl("/trade/list"));
 		}
 		
@@ -78,4 +78,41 @@ public class TradeControllerIT {
 	    	.andExpect(model().attributeHasFieldErrors("trade", "buyQuantity"))
 	    	.andExpect(view().name("trade/add"));
 	    }
-}
+	    
+	    @Test
+	    public void testShowUpdateForm_withExistingId_shouldReturnUpdateView() throws Exception {
+	        mockMvc.perform(get("/trade/update/1"))
+	                .andExpect(status().isOk())
+	                .andExpect(view().name("trade/update"))
+	                .andExpect(model().attributeExists("trade"));
+	    }
+
+	    @Test
+	    public void testShowUpdateForm_withUnknownId_shouldRedirectToListWithError() throws Exception {
+	        mockMvc.perform(get("/trade/update/123"))
+	                .andExpect(status().is3xxRedirection())
+	                .andExpect(redirectedUrl("/trade/list"))
+	                .andExpect(flash().attributeExists("errorMsg"));
+	    }
+
+	    @Test
+	    public void testUpdateTrade_withValidData_shouldRedirectToList() throws Exception {
+	        mockMvc.perform(post("/trade/update/1")
+	        		.param("account", "anyACC")
+	    			.param("type", "sell")
+	    			.param("buyQuantity", "80"))
+	                .andExpect(status().is3xxRedirection())
+	                .andExpect(redirectedUrl("/trade/list"));
+	    }
+
+	    @Test
+	    public void testUpdateTrade_withInValidData_shouldReturnUpdateViewWithError() throws Exception {
+	    	mockMvc.perform(post("/trade/update/1")
+	    			.param("account", "anyACC")
+	    			.param("type", "sell")
+	    			.param("buyQuantity", "10.4585658"))
+	    	.andExpect(status().isOk())
+	    	.andExpect(view().name("trade/update"))
+	    	.andExpectAll(model().attributeHasFieldErrors("trade", "buyQuantity"));
+	    }
+   }
