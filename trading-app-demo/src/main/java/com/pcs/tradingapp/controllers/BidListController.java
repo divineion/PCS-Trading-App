@@ -2,53 +2,88 @@ package com.pcs.tradingapp.controllers;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.pcs.tradingapp.domain.BidList;
+import com.pcs.tradingapp.dto.request.bidlist.CreateBidListDto;
+import com.pcs.tradingapp.dto.request.bidlist.UpdateBidListDto;
+import com.pcs.tradingapp.dto.response.BidListInfoDto;
+import com.pcs.tradingapp.exceptions.BidListNotFoundException;
+import com.pcs.tradingapp.services.BidListService;
 
 @Controller
 public class BidListController {
-    // TODO: Inject Bid service
-
-    @GetMapping("/bidList/list")
-    public String home(Model model)
-    {
-        // TODO: call service find all bids to show to the view
-        return "bidList/list";
+    private final BidListService service;
+    
+    public BidListController(BidListService service) {
+        this.service = service;
+    }
+    
+    @GetMapping("/bidlist/list")
+    public String list(Model model) {
+        List<BidListInfoDto> bidLists = service.getAllBidLists();
+        model.addAttribute("bidLists", bidLists);
+        return "bidlist/list";
     }
 
-    @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
-        return "bidList/add";
+    @GetMapping("/bidlist/add")
+    public String addBidListForm(Model model) {
+        model.addAttribute("bidList", new CreateBidListDto());
+        return "bidlist/add";
     }
 
-    @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
-        return "bidList/add";
+    @PostMapping("/bidlist/add")
+    public String validate(@Valid @ModelAttribute("bidList") CreateBidListDto bidListDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "bidList/add";
+        }
+        
+        service.createNewBidList(bidListDto);
+        return "redirect:/bidlist/list";
     }
 
-    @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
-        return "bidList/update";
+    @GetMapping("/bidlist/update/{id}")
+    public String showUpdateForm(@PathVariable Integer id, Model model,  RedirectAttributes redirectAttributes) {
+        UpdateBidListDto bidList;
+        try {
+            bidList = service.fetchUpdateBidListDtoById(id);
+            model.addAttribute("bidList", bidList);
+            
+            return "bidList/update";
+        } catch (BidListNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+
+            return "redirect:/bidlist/list";
+        }
     }
 
-    @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable Integer id, @Valid BidList bidList,
+    @PostMapping("/bidlist/update/{id}")
+    public String updateBid(@PathVariable Integer id, @Valid @ModelAttribute("bidList") UpdateBidListDto bidList,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
-        return "redirect:/bidList/list";
+        if (result.hasErrors()) {
+            return "bidList/update";
+        }
+        
+        service.updateBidList(bidList);
+
+        return "redirect:/bidlist/list";
     }
 
-    @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
-        return "redirect:/bidList/list";
+    @GetMapping("/bidlist/delete/{id}")
+    public String deleteBidList(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            service.deleteBidList(id);
+        } catch (BidListNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+        }
+        return "redirect:/bidlist/list";
     }
 }
