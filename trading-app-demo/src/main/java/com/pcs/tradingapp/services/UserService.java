@@ -2,7 +2,7 @@ package com.pcs.tradingapp.services;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.pcs.tradingapp.constants.ApiMessages;
@@ -23,11 +23,14 @@ public class UserService {
 	private final UserRepository repository;
 	private final RoleRepository roleRepository;
 	private final UserMapper mapper;
+	private final PasswordEncoder encoder;
 	
-	public UserService(UserRepository repository, UserMapper mapper, RoleRepository roleRepository) {
+	public UserService(UserRepository repository, UserMapper mapper, RoleRepository roleRepository,
+			PasswordEncoder encoder) {
 		this.repository = repository;
 		this.mapper = mapper;
 		this.roleRepository = roleRepository;
+		this.encoder = encoder;
 	}
 	
 	public Role fetchUserRole(String roleString) throws RoleNotFoundException {		
@@ -73,7 +76,6 @@ public class UserService {
 	public void createNewUser(CreateUserDto userDto) throws RoleNotFoundException, UsernameAlreadyExistsException {
 		validateUsernameIsAvailable(userDto.getUsername());
 
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDto.setPassword(encoder.encode(userDto.getPassword()));
         
         User user = mapper.createUserDtoToUser(userDto);
@@ -91,7 +93,6 @@ public class UserService {
 	}
 	
 	public void updateUser(UpdateUserDto userDto) throws RoleNotFoundException, UserNotFoundException, UsernameAlreadyExistsException {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userDto.setPassword(encoder.encode(userDto.getPassword()));
                 
         User user = repository.findById(userDto.getId()).orElseThrow(() -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
