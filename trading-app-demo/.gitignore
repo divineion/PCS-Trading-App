@@ -13,3 +13,6 @@
 
 ## IntelliJ
 *.iml
+
+# logs
+/logs
