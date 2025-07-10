@@ -16,6 +16,6 @@ public class HomeController
 	@GetMapping("/admin/home")
 	public String adminHome(Model model)
 	{
-		return "redirect:/bidList/list";
+		return "redirect:/bidlist/list";
 	}
 }
