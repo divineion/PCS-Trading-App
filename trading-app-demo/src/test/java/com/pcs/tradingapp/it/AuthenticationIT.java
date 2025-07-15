@@ -1,7 +1,9 @@
 package com.pcs.tradingapp.it;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -30,5 +32,12 @@ public class AuthenticationIT {
 		mockMvc.perform(formLogin("/login").user("user").password("user_P@ssw0rd"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/"));
+	}
+	
+	@Test
+	public void testAccessProtectedUrlWithoutAuthentication_shouldRedirectToLogin() throws Exception {
+		mockMvc.perform(get("/user/list"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrlPattern("**/login"));
 	}
 }
