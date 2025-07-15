@@ -7,10 +7,10 @@ VALUES (2, 'ADMIN');
 
 -- data for table app_user
 INSERT INTO app_user (fullname, username, password, role) 
-VALUES ('Administrator', 'admin', '$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa', 2);
+VALUES ('Administrator', 'admin', '$2a$10$nDL1X5EDJ9RqbIJKoRX7F.6kRCPQ8uFgYoJ/eIpu.HHgBlNxMy7/q', 2);
 
 INSERT INTO app_user(fullname, username, password, role) 
-VALUES ('User', 'user', '$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa', 1);
+VALUES ('User', 'user', '$2a$10$Y0mqtmzGrayT1AIwkQAfh.o.pQtHqkD6/TkO5VJRYusaDGUZF74Vm', 1);
 
 -- Data for table BidList
 INSERT INTO bid_list (account, type, bid_quantity, ask_quantity, bid, ask, benchmark, bid_list_date, commentary, security, status, trader, book, creation_name, creation_date, revision_name, revision_date, deal_name, deal_type, source_list_id, side)

@@ -17,7 +17,7 @@ SELECT * FROM (
 	SELECT 
 		"Administrator" as fullname, 
 		"admin" as username, 
-		"$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa" as password, 
+		"$2a$10$nDL1X5EDJ9RqbIJKoRX7F.6kRCPQ8uFgYoJ/eIpu.HHgBlNxMy7/q" as password, 
 		2 as role
 	) as tmp
 WHERE NOT EXISTS (
@@ -30,7 +30,7 @@ SELECT * FROM (
 	SELECT 
 		"User" as fullname, 
 		"user" as username, 
-		"$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa" as password, 
+		"$2a$10$Y0mqtmzGrayT1AIwkQAfh.o.pQtHqkD6/TkO5VJRYusaDGUZF74Vm" as password, 
 		1 as role
 	) AS tmp
 WHERE NOT EXISTS (
