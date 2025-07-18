@@ -17,7 +17,7 @@ import com.pcs.tradingapp.dto.request.bidlist.CreateBidListDto;
 import com.pcs.tradingapp.dto.request.bidlist.UpdateBidListDto;
 import com.pcs.tradingapp.dto.response.BidListInfoDto;
 import com.pcs.tradingapp.exceptions.BidListNotFoundException;
-import com.pcs.tradingapp.services.BidListService;
+import com.pcs.tradingapp.services.bidlist.BidListService;
 
 @Controller
 public class BidListController {

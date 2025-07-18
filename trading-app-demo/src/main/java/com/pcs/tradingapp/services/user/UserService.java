@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.services;
+package com.pcs.tradingapp.services.user;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import com.pcs.tradingapp.constants.ApiMessages;
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
-import com.pcs.tradingapp.dto.request.CreateUserDto;
-import com.pcs.tradingapp.dto.request.UpdateUserDto;
+import com.pcs.tradingapp.dto.request.user.CreateUserDto;
+import com.pcs.tradingapp.dto.request.user.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
 import com.pcs.tradingapp.exceptions.UserNotFoundException;

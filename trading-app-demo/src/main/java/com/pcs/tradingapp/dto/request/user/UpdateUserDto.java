@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.dto.request;
+package com.pcs.tradingapp.dto.request.user;
 
 public class UpdateUserDto extends CreateUserDto {
 	private int id;

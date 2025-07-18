@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.pcs.tradingapp.domain.BidList;
 import com.pcs.tradingapp.dto.response.BidListInfoDto;
+import com.pcs.tradingapp.services.bidlist.BidListMapper;
 
 public class BidListMapperTest {
 	private final BidListMapper mapper = Mappers.getMapper(BidListMapper.class);

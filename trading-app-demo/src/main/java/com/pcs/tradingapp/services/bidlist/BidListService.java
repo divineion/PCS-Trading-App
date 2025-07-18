@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.services;
+package com.pcs.tradingapp.services.bidlist;
 
 import java.util.List;
 

@@ -14,6 +14,7 @@ import com.pcs.tradingapp.exceptions.RoleNotFoundException;
 import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.repositories.RoleRepository;
 import com.pcs.tradingapp.repositories.UserRepository;
+import com.pcs.tradingapp.services.user.UserService;
 
 
 @ExtendWith(MockitoExtension.class)

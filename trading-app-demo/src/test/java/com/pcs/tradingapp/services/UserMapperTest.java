@@ -11,7 +11,8 @@ import org.mapstruct.factory.Mappers;
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
-import com.pcs.tradingapp.dto.request.CreateUserDto;
+import com.pcs.tradingapp.dto.request.user.CreateUserDto;
+import com.pcs.tradingapp.services.user.UserMapper;
 
 public class UserMapperTest {
 	private final UserMapper mapper = Mappers.getMapper(UserMapper.class);

@@ -1,12 +1,12 @@
 package com.pcs.tradingapp.controllers;
 
-import com.pcs.tradingapp.dto.request.CreateUserDto;
-import com.pcs.tradingapp.dto.request.UpdateUserDto;
+import com.pcs.tradingapp.dto.request.user.CreateUserDto;
+import com.pcs.tradingapp.dto.request.user.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 import com.pcs.tradingapp.exceptions.RoleNotFoundException;
 import com.pcs.tradingapp.exceptions.UserNotFoundException;
 import com.pcs.tradingapp.exceptions.UsernameAlreadyExistsException;
-import com.pcs.tradingapp.services.UserService;
+import com.pcs.tradingapp.services.user.UserService;
 
 import jakarta.validation.Valid;
 
