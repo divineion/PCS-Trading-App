@@ -1,5 +1,7 @@
 package com.pcs.tradingapp.domain;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +13,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="role")
-public class Role {
+public class Role implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id
 	Integer id;
