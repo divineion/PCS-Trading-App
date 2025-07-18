@@ -9,12 +9,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class SecurityConfig {
 	
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
+	
+	@Bean
+	AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+	    return new CustomAuthenticationSuccessHandler();
+	}
 	
 	// security filter chain 
 	@Bean
@@ -26,8 +32,9 @@ public class SecurityConfig {
 				auth.anyRequest().authenticated();
 			})
 			.formLogin(form -> form
-					.defaultSuccessUrl("/", true)
-					.permitAll());
+					.permitAll()
+					.successHandler(customAuthenticationSuccessHandler())
+				);
 		
 		return http.build();
 	}
@@ -39,7 +46,8 @@ public class SecurityConfig {
 	}
 	
 	// authentication manager
-	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder) throws Exception {
+	@Bean
+	AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
 		AuthenticationManagerBuilder authenticationManagerBuilder = http
 				.getSharedObject(AuthenticationManagerBuilder.class);
 		

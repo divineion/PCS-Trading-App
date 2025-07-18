@@ -14,7 +14,7 @@
     	<Root level="DEBUG">
     		<AppenderRef ref="Console"/>
     	</Root>
-    	<Logger name="com.pcs.tradingapp.config.filters" additivity="false" level="DEBUG">
+    	<Logger name="com.pcs.tradingapp.config" additivity="false" level="DEBUG">
     		<AppenderRef ref="REQUESTS_LOG"/>
     	</Logger>
     </Loggers>
