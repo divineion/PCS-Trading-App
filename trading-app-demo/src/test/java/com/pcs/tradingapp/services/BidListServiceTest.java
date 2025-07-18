@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.pcs.tradingapp.exceptions.BidListNotFoundException;
 import com.pcs.tradingapp.repositories.BidListRepository;
+import com.pcs.tradingapp.services.bidlist.BidListService;
 
 @ExtendWith(MockitoExtension.class)
 public class BidListServiceTest {
