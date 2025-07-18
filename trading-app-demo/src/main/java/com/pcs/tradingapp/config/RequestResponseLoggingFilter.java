@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.config.filters;
+package com.pcs.tradingapp.config;
 
 import java.io.IOException;
 
