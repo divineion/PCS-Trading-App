@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.dto.request;
+package com.pcs.tradingapp.dto.request.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
