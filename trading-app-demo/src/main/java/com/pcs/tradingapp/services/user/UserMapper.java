@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.services;
+package com.pcs.tradingapp.services.user;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.pcs.tradingapp.domain.User;
-import com.pcs.tradingapp.dto.request.CreateUserDto;
-import com.pcs.tradingapp.dto.request.UpdateUserDto;
+import com.pcs.tradingapp.dto.request.user.CreateUserDto;
+import com.pcs.tradingapp.dto.request.user.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 
 // génère un bean spring pr le mapper (évite de devoir instancier manuellement avec Mappers.getMapper() )
