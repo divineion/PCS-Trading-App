@@ -1,4 +1,4 @@
-package com.pcs.tradingapp.servicestrade;
+package com.pcs.tradingapp.services.trade;
 
 import java.util.List;
 

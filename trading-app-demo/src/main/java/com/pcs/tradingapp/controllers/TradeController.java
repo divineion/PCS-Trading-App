@@ -15,7 +15,7 @@ import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
 import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
 import com.pcs.tradingapp.exceptions.TradeNotFoundException;
-import com.pcs.tradingapp.servicestrade.TradeService;
+import com.pcs.tradingapp.services.trade.TradeService;
 
 import jakarta.validation.Valid;
 

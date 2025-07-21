@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
 import com.pcs.tradingapp.exceptions.TradeNotFoundException;
 import com.pcs.tradingapp.repositories.TradeRepository;
-import com.pcs.tradingapp.servicestrade.TradeService;
+import com.pcs.tradingapp.services.trade.TradeService;
 
 @ExtendWith(MockitoExtension.class)
 public class TradeServiceTest {
