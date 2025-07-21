@@ -45,6 +45,7 @@ public class SecurityConfig {
 				auth.requestMatchers("/admin/**").hasRole("ADMIN");
 				auth.anyRequest().authenticated();
 			})
+			.exceptionHandling((exceptionHandling) -> exceptionHandling.accessDeniedPage("/accessdenied"))
 			.formLogin(form -> form
 					.permitAll()
 					.successHandler(customAuthenticationSuccessHandler())
