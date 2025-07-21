@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS curve_point (
   as_of_date DATETIME,
   term DECIMAL(3,1) NOT NULL,
   curve_value DECIMAL(3,1) NOT NULL,
-  creation_date DATETIME
+  creation_date DATETIME,
+  UNIQUE (curve_id, term)
   );
 
 CREATE TABLE IF NOT EXISTS rating (
