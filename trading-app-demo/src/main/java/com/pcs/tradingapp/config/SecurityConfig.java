@@ -22,7 +22,21 @@ public class SecurityConfig {
 	    return new CustomAuthenticationSuccessHandler();
 	}
 	
-	// security filter chain 
+	/**
+	 * Configures the security filter chain with:
+	 * <ul>
+	 *   <li>Session-based authentication using form login</li>
+	 *   <li>Role-based authorization: public access to <code>/login</code>, 
+	 *   <code>ADMIN</code> role required for <code>/admin/**</code>, 
+	 *   authentication required for all other endpoints</li>
+	 *   <li>Custom handling of authentication success via 
+	 *   {@link CustomAuthenticationSuccessHandler}</li>
+	 * </ul>
+	 *
+	 * @param http the {@link HttpSecurity} to customize
+	 * @return the configured {@link SecurityFilterChain}
+	 * @throws Exception if an error occurs during configuration
+	 */
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
@@ -39,13 +53,28 @@ public class SecurityConfig {
 		return http.build();
 	}
 	
-	// password encoder
+	/**
+	 * Provides a {@link PasswordEncoder} bean using the BCrypt hashing algorithm.
+	 * This encoder is used for securely hashing and verifying user passwords.
+	 *
+	 * @return a {@link BCryptPasswordEncoder} instance
+	 */
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
-	// authentication manager
+	/**
+	 * Configures and exposes the application {@link AuthenticationManager} bean.
+	 * 
+	 * Uses the custom {@link CustomUserDetailsService} and the provided {@link PasswordEncoder}
+	 * for authentication management.
+	 *
+	 * @param http the {@link HttpSecurity} context
+	 * @param passwordEncoder the {@link PasswordEncoder} to use for authentication
+	 * @return the configured {@link AuthenticationManager}
+	 * @throws Exception if an error occurs during configuration
+	 */
 	@Bean
 	AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
 		AuthenticationManagerBuilder authenticationManagerBuilder = http
