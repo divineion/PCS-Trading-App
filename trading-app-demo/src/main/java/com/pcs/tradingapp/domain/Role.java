@@ -11,6 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Entity representing a user role in the application. 
+ * Implements {@link Serializable} interface to prevent serialization issues on authentication. 
+ * <p>
+ * Each user has a single role that specifies their access rights. 
+ * Role names are defined in {@link RoleName}.   
+ * </p>
+ */
 @Entity
 @Table(name="role")
 public class Role implements Serializable{
@@ -29,6 +37,10 @@ public class Role implements Serializable{
 	
 	public Role() {}
 
+	/**
+	 * Constructs a role with the specified name
+	 * @param name the {@link RoleName}
+	 */
 	public Role(RoleName name) {
 		this.name = name;
 	}
