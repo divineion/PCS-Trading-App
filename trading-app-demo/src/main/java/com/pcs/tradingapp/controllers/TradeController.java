@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.pcs.tradingapp.domain.Trade;
 import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
 import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
 import com.pcs.tradingapp.dto.response.TradeInfoDto;
