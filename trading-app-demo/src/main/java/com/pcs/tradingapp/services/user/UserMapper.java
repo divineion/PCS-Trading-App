@@ -10,7 +10,6 @@ import com.pcs.tradingapp.dto.request.user.CreateUserDto;
 import com.pcs.tradingapp.dto.request.user.UpdateUserDto;
 import com.pcs.tradingapp.dto.response.UserInfoDto;
 
-// génère un bean spring pr le mapper (évite de devoir instancier manuellement avec Mappers.getMapper() )
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 	@Mapping(target = "role", expression = "java(user.getRole().getName().name())")

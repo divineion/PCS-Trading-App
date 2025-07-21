@@ -30,10 +30,8 @@ public class UserServiceTest {
 	
 	@Test
 	public void testFetchRole_shouldThrowException() throws Exception {
-		//assert: repository don't find the role
 		when(roleRepository.findByName(RoleName.USER)).thenReturn(null);
 		
-		//act and assert: service shoul throw exception
 		assertThrows(RoleNotFoundException.class, ()-> service.fetchUserRole("USER"));
 	}
 	

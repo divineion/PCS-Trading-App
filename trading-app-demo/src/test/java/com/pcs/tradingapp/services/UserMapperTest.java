@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
@@ -26,7 +25,6 @@ public class UserMapperTest {
         dto.setPassword("P@ssword1");
 
         User user = mapper.createUserDtoToUser(dto);
-        //suffit pour instance sans persist
         user.setRole(new Role(RoleName.valueOf(dto.getRole())));
 
         assertAll("User entity validation",
