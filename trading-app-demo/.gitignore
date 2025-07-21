@@ -1,0 +1,18 @@
+# build output files
+/target/
+
+# local env files
+.env
+
+# IDE 
+## STS
+/.classpath
+/.project
+/.settings/
+.factorypath
+
+## IntelliJ
+*.iml
+
+# logs
+/logs

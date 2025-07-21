@@ -1,0 +1,136 @@
+package com.pcs.tradingapp.it;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
+
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringBootTest(properties = "spring.profiles.active=test")
+@AutoConfigureMockMvc
+public class BidListControllerIT {
+	@Autowired
+    private MockMvc mockMvc;
+	
+	@Test
+	@WithMockUser
+    public void testListBidList_shouldReturnListView() throws Exception {
+        mockMvc.perform(get("/bidlist/list"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidlist/list"))
+                .andExpect(model().attributeExists("bidLists"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testAddBidListForm_shouldReturnAddView() throws Exception {
+        mockMvc.perform(get("/bidlist/add"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidlist/add"))
+                .andExpect(model().attributeExists("bidList"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testAddBidList_withValidData_shouldRedirectToList() throws Exception {
+        mockMvc.perform(post("/bidlist/add")
+                        .param("account", "Account1")
+                        .param("type", "Type1")
+                        .param("bidQuantity", "10")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidlist/list"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testAddBidList_withInvalidData_shouldReturnAddView() throws Exception {
+        mockMvc.perform(post("/bidlist/add")
+                        .param("account", "") 
+                        .param("type", "Type1")
+                        .param("bidQuantity", "10")
+                        .with(csrf())
+                    )
+	                .andExpect(status().isOk())
+	                .andExpect(view().name("bidList/add"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testShowUpdateForm_withExistingId_shouldReturnUpdateView() throws Exception {
+        mockMvc.perform(get("/bidlist/update/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/update"))
+                .andExpect(model().attributeExists("bidList"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testShowUpdateForm_withUnknownId_shouldRedirectToListWithError() throws Exception {
+        mockMvc.perform(get("/bidlist/update/999")
+        				.with(csrf())
+        			)
+	                .andExpect(status().is3xxRedirection())
+	                .andExpect(redirectedUrl("/bidlist/list"))
+	                .andExpect(flash().attributeExists("errorMsg"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testUpdateBid_withValidData_shouldRedirectToList() throws Exception {
+        mockMvc.perform(post("/bidlist/update/1")
+                        .param("id", "1")
+                        .param("account", "UpdatedAccount")
+                        .param("type", "UpdatedType")
+                        .param("bidQuantity", "20")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .with(csrf())
+        		)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidlist/list"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testUpdateBid_withBlankAccount_shouldReturnUpdateView() throws Exception {
+        mockMvc.perform(post("/bidlist/update/1")
+                        .param("id", "1")
+                        .param("account", "") 
+                        .param("type", "Type1")
+                        .param("bidQuantity", "20")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/update"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testDeleteBidList_shouldRedirectToList() throws Exception {
+        mockMvc.perform(get("/bidlist/delete/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidlist/list"));
+    }
+    
+    @Test
+    @WithMockUser
+    public void testDeleteBidList_shouldThrowException() throws Exception {
+        mockMvc.perform(get("/bidlist/delete/455"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/bidlist/list"))
+            .andExpect(flash().attributeExists("errorMsg"));
+    }
+}

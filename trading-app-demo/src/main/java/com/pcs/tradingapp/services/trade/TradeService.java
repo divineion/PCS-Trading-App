@@ -1,0 +1,62 @@
+package com.pcs.tradingapp.services.trade;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.pcs.tradingapp.constants.ApiMessages;
+import com.pcs.tradingapp.domain.Trade;
+import com.pcs.tradingapp.dto.request.trade.CreateTradeDto;
+import com.pcs.tradingapp.dto.request.trade.UpdateTradeDto;
+import com.pcs.tradingapp.dto.response.TradeInfoDto;
+import com.pcs.tradingapp.exceptions.TradeNotFoundException;
+import com.pcs.tradingapp.repositories.TradeRepository;
+
+@Service
+public class TradeService {
+	private final TradeRepository repository;
+	final TradeMapper mapper;
+	
+	public TradeService(TradeRepository repository, TradeMapper mapper) {
+		this.repository = repository;
+		this.mapper = mapper;
+	}
+
+	public List<TradeInfoDto> getAllTrades() {
+		List<Trade> trades = repository.findAll();
+		
+		return mapper.tradesToTradeInfoDtos(trades);
+	}
+	
+	public TradeInfoDto getTradeById(int id) throws TradeNotFoundException {
+		Trade trade = repository.findById(id)
+				.orElseThrow(() -> new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND));
+
+		return mapper.tradeToTradeInfoDto(trade);
+	}
+
+	public void createTrade(CreateTradeDto tradeDto) {
+		Trade trade = mapper.createTradeDtoToTrade(tradeDto);
+		
+		repository.save(trade);
+	}
+
+	public void updateTrade(UpdateTradeDto tradeDto) throws TradeNotFoundException {
+		if (repository.findById(tradeDto.getId()).isEmpty()) {
+			throw new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND);
+		}
+		
+		Trade trade = mapper.updateTradeDtoToTrade(tradeDto);
+		
+		repository.save(trade);
+	}
+
+	public void deleteTrade(int id) throws TradeNotFoundException {
+		if (repository.findById(id).isEmpty()) {
+			throw new TradeNotFoundException(ApiMessages.TRADE_NOT_FOUND);
+		}
+		
+		repository.deleteById(id);
+	}
+	
+}
