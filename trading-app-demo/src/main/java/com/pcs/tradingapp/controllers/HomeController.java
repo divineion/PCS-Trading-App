@@ -18,4 +18,9 @@ public class HomeController
 	{
 		return "redirect:/bidlist/list";
 	}
+	
+	@GetMapping("/accessdenied")
+    public String accessDenied() {
+        return "403";
+    }
 }
