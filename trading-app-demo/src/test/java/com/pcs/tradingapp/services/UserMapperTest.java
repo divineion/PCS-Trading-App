@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-
 import com.pcs.tradingapp.domain.Role;
 import com.pcs.tradingapp.domain.RoleName;
 import com.pcs.tradingapp.domain.User;
