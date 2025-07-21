@@ -25,7 +25,6 @@ public class UserMapperTest {
         dto.setPassword("P@ssword1");
 
         User user = mapper.createUserDtoToUser(dto);
-        //suffit pour instance sans persist
         user.setRole(new Role(RoleName.valueOf(dto.getRole())));
 
         assertAll("User entity validation",

@@ -86,7 +86,6 @@ public class UserService {
         repository.save(user);
 	}
 	
-	// TODO rename method
 	public UpdateUserDto fetchUpdateUserDto(Integer id) throws UserNotFoundException {
 		User dbUser = repository.findById(id).orElseThrow(() -> new UserNotFoundException(ApiMessages.USER_NOT_FOUND));
         return  mapper.userToUpdateUserDto(dbUser);
