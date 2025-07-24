@@ -52,7 +52,6 @@ public class TradeController {
 
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable Integer id, RedirectAttributes redirectAttributes, Model model) {
-        // TODO: get Trade by Id and to model then show to the form
     	try {
 			TradeInfoDto trade = service.getTradeById(id);
 			model.addAttribute("trade", trade);
@@ -68,7 +67,6 @@ public class TradeController {
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable Integer id, @Valid @ModelAttribute("trade") UpdateTradeDto trade,
                              BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        // TODO: check required fields, if valid call service to update Trade and return Trade list
     	if (result.hasErrors()) {
     		return "trade/update";
     	}
@@ -84,7 +82,6 @@ public class TradeController {
 
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
-        // TODO: Find Trade by Id and delete the Trade, return to Trade list
     	try {
 			service.deleteTrade(id);
 		} catch (TradeNotFoundException e) {

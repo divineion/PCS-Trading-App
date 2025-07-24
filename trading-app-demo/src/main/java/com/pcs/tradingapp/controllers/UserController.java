@@ -37,19 +37,11 @@ public class UserController {
     }
 
     @GetMapping("/user/add")
-    // pas besoin de données pour l'affichage du formulaire
-    //mais le template attend un objet pour binder les champs,
-    // donc fournir un objet vide
     public String showAddUserForm(Model model) {
     	model.addAttribute("user", new CreateUserDto());
         return "user/add";
     }
     
-    //https://www.baeldung.com/spring-thymeleaf-error-messages
-    // https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
-    // @ModelAttribute("user") synchronise de mon dto entre le contrôleur et le template.
-    // la route est appelée au submit du form du template add
-    // donc valider le dto puis redirect si OK, sinon
     @PostMapping("/user/add")
     public String addUser(@Valid @ModelAttribute("user") CreateUserDto userDto, BindingResult result, Model model) {
     	if (result.hasErrors()) {
@@ -61,13 +53,9 @@ public class UserController {
 		    
 			return "redirect:/user/list";
     	} catch (UsernameAlreadyExistsException e) {
-    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/BindingResult.html
-    		//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/Errors.html#rejectValue(java.lang.String,java.lang.String)
 			result.rejectValue("username", null, e.getMessage());
 			return "user/add";
     	} catch (RoleNotFoundException e) {
-	    	//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/BindingResult.html
-	    	//https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/validation/Errors.html#rejectValue(java.lang.String,java.lang.String)
 	    	result.rejectValue("role", null, e.getMessage());
 	    	return "user/add";
     	}
